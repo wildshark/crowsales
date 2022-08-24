@@ -1,0 +1,17 @@
+{
+    "setup":{
+        "ower":{
+            "business_name":"",
+            "address":"",
+            "email":"",
+            "mobile":""
+        },
+        "currency":"GHS",
+        "country":""  
+    },
+    "dbm":{
+        "host":"localhost",
+        "usr":"root",
+        "pwd":""
+    }
+}
