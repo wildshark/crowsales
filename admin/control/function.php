@@ -12,9 +12,9 @@ function GenToken($user,$store){
 }
 
 function msgBox($err){
-    
+
     if(!isset($err)){
-        return ="";
+        return "";
     }else{
         switch($err){
 
