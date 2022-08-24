@@ -23,8 +23,9 @@ if(!isset($_REQUEST['submit'])){
 
                 case"user";
                     if($_REQUEST['ui'] ==="list"){
-                        require("frame/table.php");
-                    }
+                       $view ="views/user.php"; 
+                    } 
+                    require("frame/frame.php");
                 break;
             }
         }
