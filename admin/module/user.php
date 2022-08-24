@@ -18,6 +18,15 @@
             return $output;
         }
 
+        public static function fetch($conn){
+
+            $sql ="SELECT * FROM `useraccount` LIMIT 0,1000";
+            $stmt = $conn->prepare($sql);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        }
+
         public static function add(){
 
             $sql = "INSERT INTO `useraccount`(`username`, `emaill`, `password`, `mobile`) VALUES (?, ?, ?, ?)";

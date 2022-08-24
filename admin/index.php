@@ -6,6 +6,7 @@ include("control/global.php");
 
 include("module/user.php");
 include("module/store.php");
+include("module/product.php");
 
 if(!isset($_REQUEST['submit'])){
     if(!isset($_REQUEST['main'])){
@@ -21,12 +22,28 @@ if(!isset($_REQUEST['submit'])){
                     require("frame/dashboard.php");
                 break;
 
-                case"user";
-                    if($_REQUEST['ui'] ==="list"){
-                       $view ="views/user.php"; 
-                    } 
-                    require("frame/frame.php");
+                case"userlist";
+                    $data = user::fetch($conn);
+                    $view ="views/user.php";  
                 break;
+
+                case"storelist";
+                    $data = store::fetch($conn);
+                    $view ="views/store.php";  
+                break;
+
+                case"productlist";
+                    $data = product::fetch($conn);
+                    var_dump($data);
+                    exit;
+                    $view ="views/product.php";
+                break;
+            }
+
+            if($_REQUEST['main'] ==="dashboard"){
+                require("frame/dashboard.php");
+            }else{
+                require("frame/frame.php");
             }
         }
     }
@@ -69,6 +86,6 @@ if(!isset($_REQUEST['submit'])){
     }
 
     header("location: ?".http_build_query($url));
-    
+    $conn=null;
 }
 ?>
