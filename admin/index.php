@@ -301,14 +301,61 @@ if(!isset($_REQUEST['submit'])){
                 $q[] = $_REQUEST['name'];
                 $q[] = $_REQUEST['address'];
                 $q[] = $_REQUEST['mobile'];
+                $q[] = $_REQUEST['email'];
+                if(false == store::add($conn,$q)){
+                    $url = array(
+                        "main"=>"store",
+                        "ui"=>"list",
+                        "token"=>$_COOKIE['token'],
+                        "er"=>100
+                    );
+                }else{
+                    $url = array(
+                        "main"=>"store",
+                        "ui"=>"list",
+                        "token"=>$_COOKIE['token'],
+                        "er"=>200
+                    );
+                }
             }elseif($action ==="update"){
                 $q[] = $_REQUEST['name'];
                 $q[] = $_REQUEST['address'];
                 $q[] = $_REQUEST['mobile'];
+                $q[] = $_REQUEST['email'];
                 $q[] = $_REQUEST['status'];
                 $q[] = $_SESSION['record_id'];
+                if(false == store::update($conn,$q)){
+                    $url = array(
+                        "main"=>"store",
+                        "ui"=>"list",
+                        "token"=>$_COOKIE['token'],
+                        "er"=>100
+                    );
+                }else{
+                    $url = array(
+                        "main"=>"store",
+                        "ui"=>"edit",
+                        "id"=>$_SESSION['record_id'],
+                        "token"=>$_COOKIE['token'],
+                        "er"=>200
+                    );
+                }
             }elseif($action ==="delete"){
-
+                if(false == store::delete($conn,$_REQUEST['id'])){
+                    $url = array(
+                        "main"=>"store",
+                        "ui"=>"list",
+                        "token"=>$_COOKIE['token'],
+                        "er"=>100
+                    );
+                }else{
+                    $url = array(
+                        "main"=>"store",
+                        "ui"=>"list",
+                        "token"=>$_COOKIE['token'],
+                        "er"=>200
+                    );
+                }
             }
         break;
 

@@ -2,22 +2,23 @@
 
 class store{
 
-    public static function add($con,$request){
+    public static function add($conn,$request){
 
         $sql="INSERT INTO `stores`(`store_name`, `store_address`, `mobile`, `email`) VALUES (?, ?, ?, ?)";
         $stmt = $conn->prepare($sql);
         return $stmt->execute($request);
     }
 
-    public static  function update(){
+    public static  function update($conn,$request){
 
-        $sql="UPDATE `stores` SET `store_name` = ?, `store_address` = ?, `mobile` = ? WHERE `store_id` =?";
-
+        $sql="UPDATE `stores` SET `store_name` = ?, `store_address` = ?, `mobile` = ?, `email` = ?, `status` =? WHERE `store_id` =?";
+        $stmt = $conn->prepare($sql);
+        return $stmt->execute($request);
     }
 
     public static function fetch($conn){
 
-        $sql ="SELECT * FROM `stores` ORDER BY `store_id` DESC LIMIT 0,1000";
+        $sql ="SELECT stores.* FROM stores WHERE stores.`status` <> 'Delete' ORDER BY stores.store_id DESC";
         $stmt = $conn->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -28,6 +29,13 @@ class store{
         $stmt = $conn->prepare($sql);
         $stmt->execute([":id"=>$request]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public static function delete($conn,$request){
+
+        $sql="UPDATE `stores` SET `status` = 'Delete' WHERE `store_id` =:id";
+        $stmt = $conn->prepare($sql);
+        return $stmt->execute([":id"=>$request]);
     }
 
     public static function add_user_access(){
