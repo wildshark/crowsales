@@ -20,7 +20,7 @@
 
         public static function fetch($conn){
 
-            $sql ="SELECT * FROM `useraccount` LIMIT 0,1000";
+            $sql ="SELECT useraccount.*, stores.store_name FROM useraccount INNER JOIN stores ON useraccount.store_id = stores.store_id WHERE useraccount.`status` = 'Enable' OR useraccount.`status` = 'Disable'";
             $stmt = $conn->prepare($sql);
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -29,7 +29,7 @@
 
         public static function view($conn,$request){
 
-            $sql ="SELECT * FROM `useraccount` WHERE `user_id`=:id LIMIT 0,1000";
+            $sql ="SELECT useraccount.*,stores.store_name FROM useraccount INNER JOIN stores ON useraccount.store_id = stores.store_id WHERE useraccount.user_id = :id";
             $stmt = $conn->prepare($sql);
             $stmt->execute([":id"=>$request]);
             return $stmt->fetch(PDO::FETCH_ASSOC);
@@ -44,7 +44,8 @@
                 $output = false;
             }else{
                 $id = $conn->lastInsertId();
-                $sql ="INSERT INTO `user_store_access`(`store_id`, `user_id`) VALUES (?,?)";
+
+                $sql ="INSERT INTO `user_store_access`(`store_id`, `user_id`) VALUES (:store,:id)";
                 $stmt = $conn->prepare($sql);
                 $output = $stmt->execute([
                     ":store"=>$request[0],
@@ -55,9 +56,11 @@
             return $output;
         }
 
-        public static function update(){
+        public static function update($conn,$request){
 
-            $sql ="UPDATE `salesbook`.`useraccount` SET `fname` = ?, `username` = ?, `emaill` = ?, `mobile` = ?, `status` = ? WHERE `user_id` = ?";
+            $sql ="UPDATE `useraccount` SET `store_id` =?, `fname` = ?, `username` =?, `email` =?, `password` =?, `mobile` =?, `role` =?, `status` =? WHERE `user_id` =?";
+            $stmt = $conn->prepare($sql);
+            return $stmt->execute($request);
         }
 
         public static function change_password(){

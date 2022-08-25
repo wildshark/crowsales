@@ -2,9 +2,11 @@
 
 class store{
 
-    public static function add(){
+    public static function add($con,$request){
 
-        $sql="INSERT INTO `stores`(`store_name`, `store_address`,`mobile`) VALUES (?,?,?)";
+        $sql="INSERT INTO `stores`(`store_name`, `store_address`, `mobile`, `email`) VALUES (?, ?, ?, ?)";
+        $stmt = $conn->prepare($sql);
+        return $stmt->execute($request);
     }
 
     public static  function update(){
@@ -22,9 +24,9 @@ class store{
     }
 
     public static function view($conn,$request){
-        $sql ="SELECT * FROM `stores` WHERE `store_id`=? LIMIT 0,1000";
+        $sql ="SELECT * FROM `stores` WHERE `store_id`=:id LIMIT 0,1000";
         $stmt = $conn->prepare($sql);
-        $stmt->execute($request);
+        $stmt->execute([":id"=>$request]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 

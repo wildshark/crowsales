@@ -40,6 +40,8 @@ if(!isset($_REQUEST['submit'])){
                             $password = "";
                             $status = "";
                             $role = "";
+                            $storeID = "";
+                            $store = "";
                         }else{
                             $_SESSION['record_id'] = $data['user_id'];
                             $fname = $data['fname'];
@@ -49,6 +51,8 @@ if(!isset($_REQUEST['submit'])){
                             $password = $data['password'];
                             $status = $data['status'];
                             $role = $data['role'];
+                            $store = $data['store_name'];
+                            $storeID = $data['store_id'];
                         }
                         $view ="views/user/edit.php";
                     }
@@ -61,6 +65,20 @@ if(!isset($_REQUEST['submit'])){
                     }elseif($_REQUEST['ui'] === "edit"){
                         $_SESSION['record_id'] = $_GET['id'];
                         $data = store::view($conn,$_GET['id']);
+                        if($data == false){
+                            $name = "";
+                            $address = "";
+                            $mobile = "";
+                            $email = "";
+                            $status = "";
+                        }else{
+                            $name = $data['store_name'];
+                            $address = $data['store_address'];
+                            $mobile = $data['mobile'];
+                            $email = $data['email'];
+                            $status = $data['status'];
+                            $_SESSION['record_id'] = $data['store_id'];
+                        }
                         $view ="views/store/edit.php";
                     }
                 break;
@@ -178,8 +196,18 @@ if(!isset($_REQUEST['submit'])){
                         "er"=>200
                     );
                 }
-            }elseif($action === "delete"){
-                if(false == user::delete($conn,$_GET['id'])){
+            }elseif($action === "update"){
+                $q[] = $_REQUEST['asign'];
+                $q[] = $_REQUEST['name'];
+                $q[] = $_REQUEST['username'];
+                $q[] = $_REQUEST['email'];
+                $q[] = $_REQUEST['password'];
+                $q[] = $_REQUEST['mobile'];
+                $q[] = $_REQUEST['role'];
+                $q[] = $_REQUEST['status'];
+                $q[] = $_SESSION['record_id'];
+                $response = user::update($conn,$q);
+                if($response == false){
                     $url = array(
                         "main"=>"dashboard",
                         "token"=>$_COOKIE['token'],
@@ -187,7 +215,25 @@ if(!isset($_REQUEST['submit'])){
                     );
                 }else{
                     $url = array(
-                        "main"=>"dashboard",
+                        "main"=>"user",
+                        "ui"=>"edit",
+                        "id"=>$_SESSION['record_id'],
+                        "token"=>$_COOKIE['token'],
+                        "er"=>200
+                    );
+                }
+            }elseif($action === "delete"){
+                if(false == user::delete($conn,$_GET['id'])){
+                    $url = array(
+                        "main"=>"user",
+                        "ui"=>"list",
+                        "token"=>$_COOKIE['token'],
+                        "er"=>100
+                    );
+                }else{
+                    $url = array(
+                        "main"=>"user",
+                        "ui"=>"list",
                         "token"=>$_COOKIE['token'],
                         "er"=>200
                     );

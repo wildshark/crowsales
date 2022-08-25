@@ -139,6 +139,7 @@ function StoreList($data){
             $store = $r['store_name'];
             $address = $r['store_address'];
             $mobile = $r['mobile'];
+            $token = $_GET['token'];
             if($r['status'] == "Enable"){
                 $css ="text-success";
             }else{
