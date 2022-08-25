@@ -17,6 +17,15 @@ class brand{
 
         $sql ="UPDATE `band` SET `status` = 'Delete' WHERE `brand_id` =?";
     }
+
+    public static function fetch($conn){
+
+        $sql ="SELECT * FROM `brand` LIMIT 0,1000";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    }
 }
 
 ?>

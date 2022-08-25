@@ -7,6 +7,10 @@ include("control/global.php");
 include("module/user.php");
 include("module/store.php");
 include("module/product.php");
+include("module/catagory.php");
+include("module/brand.php");
+include("module/sales.php");
+include("module/purchase.php");
 
 if(!isset($_REQUEST['submit'])){
     if(!isset($_REQUEST['main'])){
@@ -19,7 +23,7 @@ if(!isset($_REQUEST['submit'])){
             switch($_REQUEST['main']){
 
                 case"dashboard";
-                    require("frame/dashboard.php");
+                    $view ="views/dashboard.php";
                 break;
 
                 case"userlist";
@@ -34,10 +38,50 @@ if(!isset($_REQUEST['submit'])){
 
                 case"productlist";
                     $data = product::fetch($conn);
-                    var_dump($data);
-                    exit;
                     $view ="views/product.php";
                 break;
+
+                case"categorylist";
+                    $page['title'] ="Catagory List";
+                    $page['subtitle']= "Manage your Product Catagory";
+                    $page['type'] = "Catagory";
+                    $table_title="<tr>
+                    <th>#</th>
+                    <th>Catagory</th>
+                    <th>Products</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                    </tr>";
+                    $data = catagory::fetch($conn);
+                    $view = "views/catagory.php";
+                break;
+
+                case"brandlist";
+                    $data = brand::fetch($conn);
+                    $view = "views/brand.php";
+                break;
+
+                case"saleslist";
+                    $data = sales::fetch($conn);
+                    $view = "views/sales.php";
+                break;
+
+                case"salesreturnlists";
+                    $data = sales::reject($conn);
+                    $view = "views/sales.reject.php";
+                break;
+
+                case"purchaselist";
+                    $data = purchase::fetch($conn);
+                    $view = "views/purchase.php";
+                break;
+
+                case"purchasereturnlists";
+                    $data = purchase::reject($conn);
+                    $view = "views/purchase.reject.php";
+                break;
+
+
             }
 
             if($_REQUEST['main'] ==="dashboard"){

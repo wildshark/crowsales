@@ -1,20 +1,20 @@
 <?php
 
-class sales{
+class purchase{
 
-    public static function add_sales(){
+    public static function add(){
 
-        $sql="INSERT INTO `transaction`(`store_id`, `user_id`, `product_id`, `tran_type_id`, `tran_date`, `ref`, `price`, `sold`, `details`) VALUES (1, 1, 1, 1, '2022-08-24', '1', 1, '1', '1')";
+        $sql ="";
+
     }
 
-    public static function add_return(){
+    public static function update(){
 
-        $sql ="INSERT INTO `transaction`(`store_id`, `user_id`, `product_id`, `tran_type_id`, `tran_date`, `ref`, `price`, `return`) VALUES (1, 1, 1, 1, '2022-08-24', '1', 1, '1')";
     }
 
     public static function fetch($conn){
 
-        $sql="SELECT
+        $sql ="SELECT
         `transaction`.*, 
         invoice.ref, 
         products.product_name, 
@@ -44,12 +44,11 @@ class sales{
          $stmt = $conn->prepare($sql);
          $stmt->execute();
          return $stmt->fetchAll(PDO::FETCH_ASSOC);
-
     }
 
     public static function reject($conn){
 
-        $sql="SELECT
+        $sql ="SELECT
         `transaction`.*, 
         invoice.ref, 
         products.product_name, 
@@ -81,5 +80,4 @@ class sales{
          return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }
-
 ?>

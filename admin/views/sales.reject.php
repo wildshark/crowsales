@@ -1,11 +1,11 @@
 <div class="page-header">
     <div class="page-title">
-        <h4>Brand List</h4>
-        <h6>Manage your brand</h6>
+        <h4>Sales Reject List</h4>
+        <h6>Manage your sales reject</h6>
     </div>
     <div class="page-btn">
         <a href="#" class="btn btn-added"><img src="assets/img/icons/plus.svg" alt="img" class="me-2">Add
-            Brand</a>
+            SalesReject </a>
     </div>
 </div>
 
@@ -82,14 +82,19 @@
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Image</th>
-                        <th>Products</th>
-                        <th>Status</th>
-                        <th>Action</th>
+                        <th>Date</th>
+                        <th>SKU</th>
+                        <th>Product Name</th>
+                        <th>Ref</th>
+                        <th>Price</th>
+                        <th>Qty</th>
+                        <th>Amount</th>
+                        <th>Store</th>
+                        <th>User</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?=BrandList($data)?>
+                    <?=SalesRejectList($data)?>
                 </tbody>
             </table>
         </div>

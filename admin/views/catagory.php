@@ -1,11 +1,11 @@
 <div class="page-header">
     <div class="page-title">
-        <h4>Brand List</h4>
-        <h6>Manage your brand</h6>
+        <h4><?=$page['title']?></h4>
+        <h6><?=$page['subtitle']?></h6>
     </div>
     <div class="page-btn">
         <a href="#" class="btn btn-added"><img src="assets/img/icons/plus.svg" alt="img" class="me-2">Add
-            Brand</a>
+            <?=$page['type']?></a>
     </div>
 </div>
 
@@ -80,16 +80,10 @@
         <div class="table-responsive">
             <table class="table  datanew">
                 <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Image</th>
-                        <th>Products</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
+                    <?=$table_title?>
                 </thead>
                 <tbody>
-                    <?=BrandList($data)?>
+                    <?=CatagoryList($conn,$data)?>
                 </tbody>
             </table>
         </div>

@@ -1,11 +1,11 @@
 <div class="page-header">
     <div class="page-title">
-        <h4>product List</h4>
-        <h6>Manage your Product</h6>
+        <h4>Sales List</h4>
+        <h6>Manage your sales</h6>
     </div>
     <div class="page-btn">
-        <a href="addstore.html" class="btn btn-added"><img src="assets/img/icons/plus.svg" alt="img" class="me-2">Add
-            Product</a>
+        <a href="#" class="btn btn-added"><img src="assets/img/icons/plus.svg" alt="img" class="me-2">Add
+            Sales</a>
     </div>
 </div>
 
@@ -82,16 +82,19 @@
                 <thead>
                     <tr>
                         <th>#</th>
+                        <th>Date</th>
                         <th>SKU</th>
-                        <th>Product</th>
-                        <th>Catagory</th>
-                        <th>Brand</th>                        
+                        <th>Product Name</th>
+                        <th>Ref</th>
                         <th>Price</th>
-                        <th>Action</th>
+                        <th>Qty</th>
+                        <th>Amount</th>
+                        <th>Store</th>
+                        <th>User</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?=StoreList($data)?>
+                    <?=PurchaseList($data)?>
                 </tbody>
             </table>
         </div>
