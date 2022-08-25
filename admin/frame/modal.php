@@ -1,3 +1,41 @@
+<div class="modal fade" id="addbrand" tabindex="-1" aria-labelledby="addbrand" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Brand</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            </div>
+            <form method="post" action="index.php">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-6 col-sm-12 col-12">
+                            <div class="form-group">
+                                <label>Brand Name</label>
+                                <div class="input-group">
+                                    <input type="text" name="brand-name" value="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-sm-12 col-12">
+                            <div class="form-group">
+                                <label>Upload Brand Logo</label>
+                                <input type="file" name="image" value="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" name="submit" value="brand-add" class="btn btn-submit">Submit</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!----END POINT---------------------------------------------------------------------------------------->
+
+
 <div class="modal fade" id="showpayment" tabindex="-1" aria-labelledby="showpayment" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">

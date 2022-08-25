@@ -81,7 +81,6 @@ if(!isset($_REQUEST['submit'])){
                     $view = "views/purchase.reject.php";
                 break;
 
-
             }
 
             if($_REQUEST['main'] ==="dashboard"){
@@ -93,40 +92,63 @@ if(!isset($_REQUEST['submit'])){
     }
 }else{
 
-    switch($_REQUEST['submit']){
+    $submit = explode("-",$_REQUEST['submit']);
+    $command = $submit[0];
+    $action = $submit[1];
+    switch($command){
 
-        case"login";
-            $q[] = $_REQUEST['usr'];
-            $q[] = $_REQUEST['pwd'];
-            $response = user::signin($conn,$q);
-            if($response == false){
-                $url = array(
-                    "user"=>false,
-                );
-            }else{
-                $store = store::user_access($conn,$response['user_id']);
-                if($store == false){
+        case"user";
+            if($action === "login"){
+                $q[] = $_REQUEST['usr'];
+                $q[] = $_REQUEST['pwd'];
+                $response = user::signin($conn,$q);
+                if($response == false){
                     $url = array(
-                        "store"=>false,
+                        "user"=>false,
                     );
                 }else{
-                    
-                    $_SESSION['usrID'] = $response['user_id'];
-                    $_SESSION['strID'] = $store['store_id'];
-                    $token = GenToken($response['user_id'],$store['store_id']);
-                    setcookie("username",$response['username']);
-                    setcookie("fullname",$response['fname']);
-                    setcookie("user_role",$response['role']);
-                    setcookie("token",$token);
-                    $url = array(
-                        "main"=>"dashboard",
-                        "token"=>$token
-                    );
-                } 
+                    $store = store::user_access($conn,$response['user_id']);
+                    if($store == false){
+                        $url = array(
+                            "store"=>false,
+                        );
+                    }else{
+                        
+                        $_SESSION['usrID'] = $response['user_id'];
+                        $_SESSION['strID'] = $store['store_id'];
+                        $token = GenToken($response['user_id'],$store['store_id']);
+                        setcookie("username",$response['username']);
+                        setcookie("fullname",$response['fname']);
+                        setcookie("user_role",$response['role']);
+                        setcookie("token",$token);
+                        $url = array(
+                            "main"=>"dashboard",
+                            "token"=>$token
+                        );
+                    } 
+                }
             }
         break;
 
+        case"brand";
+            if($action === "add"){
+                $q[] = $_REQUEST['brand-add'];
+                $q[] = $_REQUEST['image'];
+                $response = brand::add($conn,$q);
+            }elseif($action === "update"){
+                $q[] = $_REQUEST['brand-add'];
+                $q[] = $_REQUEST['image'];
+                $q[] = $_REQUEST['id'];
+                $response = brand::update($conn,$q);
+            }elseif($action === "delete"){
+                $q[] = $_REQUEST['id'];
+                $response = brand::delete($conn,$q);
+            }
+        break;
 
+        case"";
+
+        break;
     }
 
     header("location: ?".http_build_query($url));

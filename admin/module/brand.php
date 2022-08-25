@@ -2,9 +2,11 @@
 
 class brand{
 
-    public static function add(){
+    public static function add($conn,$request){
 
         $sql ="INSERT INTO `band`(`band`, `image`) VALUES (?, ?)";
+        $stmt = $conn->prepare($sql);
+        return $stmt->execute();
     }
 
     public static function update(){

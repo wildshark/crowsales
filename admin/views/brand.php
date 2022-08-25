@@ -4,7 +4,7 @@
         <h6>Manage your brand</h6>
     </div>
     <div class="page-btn">
-        <a href="#" class="btn btn-added"><img src="assets/img/icons/plus.svg" alt="img" class="me-2">Add
+        <a href="#" data-bs-toggle="modal" data-bs-target="#addbrand" class="btn btn-added"><img src="assets/img/icons/plus.svg" alt="img" class="me-2">Add
             Brand</a>
     </div>
 </div>
@@ -83,7 +83,7 @@
                     <tr>
                         <th>#</th>
                         <th>Image</th>
-                        <th>Products</th>
+                        <th>Brand Name</th>
                         <th>Status</th>
                         <th>Action</th>
                     </tr>
