@@ -26,14 +26,43 @@ if(!isset($_REQUEST['submit'])){
                     $view ="views/dashboard.php";
                 break;
 
-                case"userlist";
-                    $data = user::fetch($conn);
-                    $view ="views/user.php";  
+                case"user";
+                    if($_REQUEST['ui'] === "list"){
+                        $data = user::fetch($conn);
+                        $view ="views/user/user.php";     
+                    }elseif($_REQUEST['ui'] === "edit"){
+                        $data = user::view($conn,$_GET['id']);
+                        if($data == false){
+                            $fname = "";
+                            $username = "";
+                            $email = "";
+                            $mobile = "";
+                            $password = "";
+                            $status = "";
+                            $role = "";
+                        }else{
+                            $_SESSION['record_id'] = $data['user_id'];
+                            $fname = $data['fname'];
+                            $username = $data['username'];
+                            $email = $data['email'];
+                            $mobile = $data['mobile'];
+                            $password = $data['password'];
+                            $status = $data['status'];
+                            $role = $data['role'];
+                        }
+                        $view ="views/user/edit.php";
+                    }
                 break;
 
-                case"storelist";
-                    $data = store::fetch($conn);
-                    $view ="views/store.php";  
+                case"store";
+                    if($_REQUEST['ui'] === "list"){
+                        $data = store::fetch($conn);
+                        $view ="views/store/store.php";  
+                    }elseif($_REQUEST['ui'] === "edit"){
+                        $_SESSION['record_id'] = $_GET['id'];
+                        $data = store::view($conn,$_GET['id']);
+                        $view ="views/store/edit.php";
+                    }
                 break;
 
                 case"productlist";
@@ -91,7 +120,8 @@ if(!isset($_REQUEST['submit'])){
         }
     }
 }else{
-
+//var_dump($_REQUEST);
+//exit;
     $submit = explode("-",$_REQUEST['submit']);
     $command = $submit[0];
     $action = $submit[1];
@@ -126,6 +156,41 @@ if(!isset($_REQUEST['submit'])){
                             "token"=>$token
                         );
                     } 
+                }
+            }elseif($action === "add"){
+                $q[] = $_REQUEST['asign'];
+                $q[] = $_REQUEST['name'];
+                $q[] = $_REQUEST['username'];
+                $q[] = $_REQUEST['email'];
+                $q[] = $_REQUEST['password'];
+                $q[] = $_REQUEST['mobile'];
+                if(false == user::add($conn,$q)){
+                    $url = array(
+                        "main"=>"dashboard",
+                        "token"=>$_COOKIE['token'],
+                        "er"=>100
+                    );
+                }else{
+                    $url = array(
+                        "main"=>"user",
+                        "ui"=>"list",
+                        "token"=>$_COOKIE['token'],
+                        "er"=>200
+                    );
+                }
+            }elseif($action === "delete"){
+                if(false == user::delete($conn,$_GET['id'])){
+                    $url = array(
+                        "main"=>"dashboard",
+                        "token"=>$_COOKIE['token'],
+                        "er"=>100
+                    );
+                }else{
+                    $url = array(
+                        "main"=>"dashboard",
+                        "token"=>$_COOKIE['token'],
+                        "er"=>200
+                    );
                 }
             }
         break;
@@ -162,10 +227,79 @@ if(!isset($_REQUEST['submit'])){
 
         case"product";
             if($action === "add"){
+                $q[] = $_REQUEST['catagory'];
+                $q[] = $_REQUEST['brand'];
+                $q[] = $_REQUEST['name'];
+                $q[] = $_REQUEST['sku'];
+                $q[] = $_REQUEST['details'];
+                $q[] = $_REQUEST['discount'];
+                $q[] = $_REQUEST['price'];
 
             }elseif($action === "update"){
-
+                $q[] = $_REQUEST['catagory'];
+                $q[] = $_REQUEST['brand'];
+                $q[] = $_REQUEST['name'];
+                $q[] = $_REQUEST['sku'];
+                $q[] = $_REQUEST['details'];
+                $q[] = $_REQUEST['discount'];
+                $q[] = $_REQUEST['price'];
+                $q[] = $_REQUEST['status'];
+                
             }elseif($action === "delete"){
+
+            }
+        break;
+
+        case"store";
+            if($action ==="add"){
+                $q[] = $_REQUEST['name'];
+                $q[] = $_REQUEST['address'];
+                $q[] = $_REQUEST['mobile'];
+            }elseif($action ==="update"){
+                $q[] = $_REQUEST['name'];
+                $q[] = $_REQUEST['address'];
+                $q[] = $_REQUEST['mobile'];
+                $q[] = $_REQUEST['status'];
+                $q[] = $_SESSION['record_id'];
+            }elseif($action ==="delete"){
+
+            }
+        break;
+
+        case"invoice";
+            if($action ==="add"){
+                $q[] = $_SESSION['storeID'];
+                $q[] = $_SESSION['usrID'];
+                $q[] = $_SESSION['typeID'];
+                $q[] = $_REQUEST['date'];
+                $q[] = $_REQUEST['ref'];
+                $q[] = $_REQUEST['details'];
+            }elseif($action ==="update"){
+                $q[] = $_REQUEST['date'];
+                $q[] = $_REQUEST['ref'];
+                $q[] = $_REQUEST['details'];
+                $q[] = $_SESSION['record_id'];
+            }elseif($action ==="delete"){
+
+            }
+        break;
+
+        case"test";
+            if($action ==="add"){
+
+            }elseif($action ==="update"){
+
+            }elseif($action ==="delete"){
+
+            }
+        break;
+
+        case"test";
+            if($action ==="add"){
+
+            }elseif($action ==="update"){
+
+            }elseif($action ==="delete"){
 
             }
         break;

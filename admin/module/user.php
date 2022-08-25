@@ -27,9 +27,32 @@
 
         }
 
-        public static function add(){
+        public static function view($conn,$request){
 
-            $sql = "INSERT INTO `useraccount`(`username`, `emaill`, `password`, `mobile`) VALUES (?, ?, ?, ?)";
+            $sql ="SELECT * FROM `useraccount` WHERE `user_id`=:id LIMIT 0,1000";
+            $stmt = $conn->prepare($sql);
+            $stmt->execute([":id"=>$request]);
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+
+        }
+
+        public static function add($conn,$request){
+
+            $sql = "INSERT INTO `useraccount`(`store_id`, `fname`, `username`, `email`, `password`, `mobile`) VALUES (?, ?, ?, ?, ?, ?)";
+            $stmt = $conn->prepare($sql);
+            if(false == $stmt->execute($request)){
+                $output = false;
+            }else{
+                $id = $conn->lastInsertId();
+                $sql ="INSERT INTO `user_store_access`(`store_id`, `user_id`) VALUES (?,?)";
+                $stmt = $conn->prepare($sql);
+                $output = $stmt->execute([
+                    ":store"=>$request[0],
+                    ":id"=>$id
+                ]);
+            };
+
+            return $output;
         }
 
         public static function update(){
@@ -45,6 +68,13 @@
         public static function change_status(){
         
             $sql ="UPDATE `salesbook`.`useraccount` SET `status` = 'ss' WHERE `user_id` = ?";
+        }
+
+        public static function delete($conn,$request){
+
+            $sql ="UPDATE `useraccount` SET `status` = 'Delete' WHERE `user_id` =:id";
+            $stmt = $conn->prepare($sql);
+            $stmt->execute([":id"=>$request]);
         }
     }
 

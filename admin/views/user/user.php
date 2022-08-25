@@ -1,11 +1,11 @@
 <div class="page-header">
     <div class="page-title">
-        <h4>Store List</h4>
-        <h6>Manage your Store</h6>
+        <h4>User List</h4>
+        <h6>Manage your User Access</h6>
     </div>
     <div class="page-btn">
-        <a href="#" class="btn btn-added"><img src="assets/img/icons/plus.svg" alt="img" class="me-2">Add
-            Store</a>
+        <a href="#" data-bs-toggle="modal" data-bs-target="#adduser" class="btn btn-added"><img src="assets/img/icons/plus.svg" alt="img" class="me-2">Add
+            User</a>
     </div>
 </div>
 
@@ -81,16 +81,22 @@
             <table class="table  datanew">
                 <thead>
                     <tr>
-                        <th>#</th>
-                        <th>Store Name</th>
+                        <th>
+                            <label class="checkboxs">
+                                <input type="checkbox">
+                                <span class="checkmarks"></span>
+                            </label>
+                        </th>
+                        <th>Username</th>
+                        <th>Staff Name </th>
                         <th>Phone</th>
-                        <th>Address</th>
+                        <th>email</th>
                         <th>Status</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?=StoreList($data)?>
+                   <?=UserList($data)?>
                 </tbody>
             </table>
         </div>

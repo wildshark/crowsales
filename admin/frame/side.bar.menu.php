@@ -7,9 +7,9 @@
         <a href="javascript:void(0);"><img src="assets/img/icons/product.svg" alt="img"><span>
                 Product</span> <span class="menu-arrow"></span></a>
         <ul>
-            <li><a href="?main=productlist&token=<?=$_GET['token']?>">Product List</a></li>
-            <li><a href="?main=categorylist&token=<?=$_GET['token']?>">Category List</a></li>
-            <li><a href="?main=brandlist&token=<?=$_GET['token']?>">Brand List</a></li>
+            <li><a href="?main=product&ui=list&token=<?=$_GET['token']?>">Product List</a></li>
+            <li><a href="?main=category&ui=list&token=<?=$_GET['token']?>">Category List</a></li>
+            <li><a href="?main=brand&ui=list&token=<?=$_GET['token']?>">Brand List</a></li>
             <!--li><a href="importproduct&token=<?=$_GET['token']?>">Import Products</a></li>
             <li><a href="barcode&token=<?=$_GET['token']?>">Print Barcode</a></li-->
         </ul>
@@ -18,8 +18,8 @@
         <a href="javascript:void(0);"><img src="assets/img/icons/sales1.svg" alt="img"><span>
                 Sales</span> <span class="menu-arrow"></span></a>
         <ul>
-            <li><a href="?main=saleslist&token=<?=$_GET['token']?>">Sales List</a></li>
-            <li><a href="?main=salesreturnlists&token=<?=$_GET['token']?>">Sales Return List</a></li>
+            <li><a href="?main=sales&ui=list&token=<?=$_GET['token']?>">Sales List</a></li>
+            <li><a href="?main=salesreturn&ui=lists&token=<?=$_GET['token']?>">Sales Return List</a></li>
             <!--li><a href="?main=pos&token=<?=$_GET['token']?>">POS</a></li-->
             <!--li><a href="?main=pos&token=<?=$_GET['token']?>">New Sales</a></li-->
             <!--li><a href="?main=createsalesreturns&token=<?=$_GET['token']?>">New Sales Return</a></li-->
@@ -29,15 +29,15 @@
         <a href="javascript:void(0);"><img src="assets/img/icons/purchase1.svg" alt="img"><span>
                 Purchase</span> <span class="menu-arrow"></span></a>
         <ul>
-            <li><a href="?main=purchaselist&token=<?=$_GET['token']?>">Purchase List</a></li>
-            <li><a href="?main=purchasereturnlists&token=<?=$_GET['token']?>">Purchase Reject</a></li>
+            <li><a href="?main=purchase&ui=list&token=<?=$_GET['token']?>">Purchase List</a></li>
+            <li><a href="?main=purchasereturn&ui=lists&token=<?=$_GET['token']?>">Purchase Reject</a></li>
         </ul>
     </li>
     <li class="submenu">
         <a href="javascript:void(0);"><img src="assets/img/icons/transfer1.svg" alt="img"><span>
                 Transfer</span> <span class="menu-arrow"></span></a>
         <ul>
-            <li><a href="?main=transferlist&token=<?=$_GET['token']?>">Transfer List</a></li>
+            <li><a href="?main=transfer&ui=list&token=<?=$_GET['token']?>">Transfer List</a></li>
             <li><a href="?main=addtransfer&token=<?=$_GET['token']?>">Add Transfer </a></li>
             <li><a href="?main=importtransfer&token=<?=$_GET['token']?>">Import Transfer </a></li>
         </ul>
@@ -46,8 +46,8 @@
         <a href="javascript:void(0);"><img src="assets/img/icons/users1.svg" alt="img"><span>
                 Users & Store</span> <span class="menu-arrow"></span></a>
         <ul>
-            <li><a href="?main=userlist&token=<?=$_GET['token']?>">User List</a></li>
-            <li><a href="?main=storelist&token=<?=$_GET['token']?>">Store List</a></li>
+            <li><a href="?main=user&ui=list&token=<?=$_GET['token']?>">User List</a></li>
+            <li><a href="?main=store&ui=list&token=<?=$_GET['token']?>">Store List</a></li>
         </ul>
     </li>
     <li class="submenu">

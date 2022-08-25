@@ -26,6 +26,36 @@ function CatagoryCombo($conn){
     return $output;
 }
 
+function BrandCombo($conn){
+    $output ="";
+    $data = brand::fetch($conn);
+    if($data == false){
+        $output ="";
+    }else{
+        foreach($data as $r){
+            $id = $r['brand_id'];
+            $brand = $r['brand'];
+            $output .="<option value='$id'>$brand</option>";
+        }
+    }
+    return $output;
+}
+
+function StoreCombo($conn){
+    $output ="";
+    $data = store::fetch($conn);
+    if($data == false){
+        $output ="";
+    }else{
+        foreach($data as $r){
+            $id = $r['store_id'];
+            $name = $r['store_name'];
+            $output .="<option value='$id'>$name</option>";
+        }
+    }
+    return $output;
+}
+
 function msgBox($err){
 
     if(!isset($err)){
@@ -60,11 +90,12 @@ function UserList($data){
             }else{
                 $n = $n + 1;
             }
+            $id = $r['user_id'];
             $name = $r['fname'];
             $usrn = $r['username'];
-            $email = $r['emaill'];
+            $email = $r['email'];
             $mobile = $r['mobile'];
-
+            $token = $_GET['token'];
             if($r['status'] == "Enable"){
                 $css ="text-success";
             }else{
@@ -80,10 +111,10 @@ function UserList($data){
             <td>$email</td>
             <td class='$css'>$status</td>
             <td>
-                <a class='me-3' href='editstore.html'>
+                <a class='me-3' href='?main=user&ui=edit&id=$id&token=$token'>
                     <img src='assets/img/icons/edit.svg' alt='img'>
                 </a>
-                <a class='me-3 confirm-text' href='javascript:void(0);'>
+                <a class='me-3' href='?submit=user-delete&id=$id'>
                     <img src='assets/img/icons/delete.svg' alt='img'>
                 </a>
             </td>
@@ -104,6 +135,7 @@ function StoreList($data){
             }else{
                 $n = $n + 1;
             }
+            $id = $r['store_id'];
             $store = $r['store_name'];
             $address = $r['store_address'];
             $mobile = $r['mobile'];
@@ -121,10 +153,10 @@ function StoreList($data){
             <td>$address</td>
             <td class='$css'>$status</td>
             <td>
-                <a class='me-3' href='editstore.html'>
+                <a class='me-3' href='?main=store&ui=edit&id=$id&token=$token'>
                     <img src='assets/img/icons/edit.svg' alt='img'>
                 </a>
-                <a class='me-3 confirm-text' href='javascript:void(0);'>
+                <a class='me-3' href='?submit=store-delete&id=$id'>
                     <img src='assets/img/icons/delete.svg' alt='img'>
                 </a>
             </td>
