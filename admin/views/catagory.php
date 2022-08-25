@@ -4,8 +4,8 @@
         <h6><?=$page['subtitle']?></h6>
     </div>
     <div class="page-btn">
-        <a href="#" class="btn btn-added"><img src="assets/img/icons/plus.svg" alt="img" class="me-2">Add
-            <?=$page['type']?></a>
+        <a href="#" data-bs-toggle="modal" data-bs-target="#addcatagory" class="btn btn-added">
+            <img src="assets/img/icons/plus.svg" alt="img" class="me-2">Add Catagory</a>
     </div>
 </div>
 

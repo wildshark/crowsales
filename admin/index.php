@@ -146,8 +146,28 @@ if(!isset($_REQUEST['submit'])){
             }
         break;
 
-        case"";
+        case"catagory";
+            if($action === "add"){
+                $q[] = $_REQUEST['catagory-name'];
+                $response = catagory::add($conn,$q);
+            }elseif($action === "update"){
+                $q[] = $_REQUEST['catagory-name'];
+                $q[] = $_REQUEST['id'];
+                $response = catagory::update($conn,$q);
+            }elseif($action === "delete"){
+                $q[] = $_REQUEST['id'];
+                $response = catagory::delete($conn,$q);
+            }
+        break;
 
+        case"product";
+            if($action === "add"){
+
+            }elseif($action === "update"){
+
+            }elseif($action === "delete"){
+
+            }
         break;
     }
 

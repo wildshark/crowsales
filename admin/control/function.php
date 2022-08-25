@@ -11,6 +11,21 @@ function GenToken($user,$store){
     return md5($user.$store);
 }
 
+function CatagoryCombo($conn){
+    $output ="";
+    $data = catagory::fetch($conn);
+    if($data == false){
+        $output ="";
+    }else{
+        foreach($data as $r){
+            $id = $r['catagory_id'];
+            $catagory = $r['catagory'];
+            $output .="<option value='$id'>$catagory</option>";
+        }
+    }
+    return $output;
+}
+
 function msgBox($err){
 
     if(!isset($err)){
