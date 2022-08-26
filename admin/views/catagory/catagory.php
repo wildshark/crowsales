@@ -83,7 +83,7 @@
                     <?=$table_title?>
                 </thead>
                 <tbody>
-                    <?=CatagoryList($conn,$data)?>
+                    <?=CatagoryList($data)?>
                 </tbody>
             </table>
         </div>

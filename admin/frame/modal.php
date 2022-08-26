@@ -44,7 +44,6 @@
                 </div>
                 <div class="modal-footer">
                     <button type="submit" name="submit" value="store-add" class="btn btn-submit">Submit</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
             </form>
         </div>
@@ -121,7 +120,7 @@
 </div>
 
 <div class="modal fade" id="addbrand" tabindex="-1" aria-labelledby="addbrand" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Add Brand</h5>
@@ -130,18 +129,12 @@
             <form method="post" action="index.php">
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-lg-6 col-sm-12 col-12">
+                        <div class="col-lg-12 col-sm-12 col-12">
                             <div class="form-group">
                                 <label>Brand Name</label>
                                 <div class="input-group">
-                                    <input type="text" name="brand-name" value="">
+                                    <input type="text" name="name" value="">
                                 </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-sm-12 col-12">
-                            <div class="form-group">
-                                <label>Upload Brand Logo</label>
-                                <input type="file" name="image" value="">
                             </div>
                         </div>
                     </div>
@@ -169,7 +162,7 @@
                             <div class="form-group">
                                 <label>Name</label>
                                 <div class="input-group">
-                                    <input type="text" name="catagory-name" value="">
+                                    <input type="text" name="name" value="">
                                 </div>
                             </div>
                         </div>
@@ -244,7 +237,7 @@
                         <div class="col-lg-4 col-sm-12 col-12">
                             <div class="form-group">
                                 <label>Selling Price</label>
-                                <input type="text" name="amount" placeholder="0.00">
+                                <input type="text" name="price" placeholder="0.00">
                             </div>
                         </div>                    
                     </div>

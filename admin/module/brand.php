@@ -4,15 +4,16 @@ class brand{
 
     public static function add($conn,$request){
 
-        $sql ="INSERT INTO `band`(`band`, `image`) VALUES (?, ?)";
+        $sql ="INSERT INTO `brand`(`brand`) VALUES (?)";
         $stmt = $conn->prepare($sql);
-        return $stmt->execute();
+        return $stmt->execute($request);
     }
 
-    public static function update(){
+    public static function update($conn,$request){
 
-        $sql = "UPDATE `band` SET `band` =?, `image` =? WHERE `brand_id` =?";
-
+        $sql = "UPDATE `brand` SET `brand` = ?, `status` =? WHERE `brand_id` =?";
+        $stmt = $conn->prepare($sql);
+        return $stmt->execute($request);
     }
 
     public static function delete(){

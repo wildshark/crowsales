@@ -178,6 +178,7 @@ function ProductList($data){
             }else{
                 $n = $n + 1;
             }
+            $id = $r['product_id'];
             $name = $r['product_name'];
             $sku = $r['product_sku'];
             $price = $r['price'];
@@ -189,7 +190,7 @@ function ProductList($data){
                 $css ="text-danger";
             }
             $status = $r['status'];
-
+            $token = $_GET['token'];
             $output .="<tr>
             <td>$n</td>
             <td>$sku</td>
@@ -199,10 +200,10 @@ function ProductList($data){
             <td>$price</td>
             <td class='$css'>$status</td>
             <td>
-                <a class='me-3' href='editstore.html'>
+                <a class='me-3' href='?main=product&ui=edit&id=$id&token=$token'>
                     <img src='assets/img/icons/edit.svg' alt='img'>
                 </a>
-                <a class='me-3 confirm-text' href='javascript:void(0);'>
+                <a class='me-3' href='?submit=product-delete&id=$id'>
                     <img src='assets/img/icons/delete.svg' alt='img'>
                 </a>
             </td>
@@ -231,17 +232,17 @@ function CatagoryList($data){
                 $css ="text-danger";
             }
             $status = $r['status'];
-            $total_product = catagory::count_product_group($conn,$id);
+            $token = $_GET['token'];
             $output .="<tr>
             <td>$n</td>
             <td>$name</td>
-            <td>$total_product</td>
+            <td>0</td>
             <td class='$css'>$status</td>
             <td>
-                <a class='me-3' href='editstore.html'>
+                <a class='me-3' href='?main=catagory&ui=edit&id=$id&token=$token'>
                     <img src='assets/img/icons/edit.svg' alt='img'>
                 </a>
-                <a class='me-3 confirm-text' href='javascript:void(0);'>
+                <a class='me-3' href='?submit=catagory-delete&id=$id'>
                     <img src='assets/img/icons/delete.svg' alt='img'>
                 </a>
             </td>
@@ -265,6 +266,7 @@ function BrandList($data){
             $id = $r['brand_id'];
             $name = $r['brand'];
             $image = $r['image'];
+            $token = $_GET['token'];
             if($r['status'] == "Enable"){
                 $css ="text-success";
             }else{
@@ -278,10 +280,10 @@ function BrandList($data){
             <td>$name</td>
             <td class='$css'>$status</td>
             <td>
-                <a class='me-3' href='editstore.html'>
+                <a class='me-3' href='?main=brand&id=$id&token=$token'>
                     <img src='assets/img/icons/edit.svg' alt='img'>
                 </a>
-                <a class='me-3 confirm-text' href='javascript:void(0);'>
+                <a class='me-3 confirm-text' href='?submit=brand-delete&id=$id'>
                     <img src='assets/img/icons/delete.svg' alt='img'>
                 </a>
             </td>

@@ -8,7 +8,7 @@
                 Product</span> <span class="menu-arrow"></span></a>
         <ul>
             <li><a href="?main=product&ui=list&token=<?=$_GET['token']?>">Product List</a></li>
-            <li><a href="?main=category&ui=list&token=<?=$_GET['token']?>">Category List</a></li>
+            <li><a href="?main=catagory&ui=list&token=<?=$_GET['token']?>">Category List</a></li>
             <li><a href="?main=brand&ui=list&token=<?=$_GET['token']?>">Brand List</a></li>
             <!--li><a href="importproduct&token=<?=$_GET['token']?>">Import Products</a></li>
             <li><a href="barcode&token=<?=$_GET['token']?>">Print Barcode</a></li-->

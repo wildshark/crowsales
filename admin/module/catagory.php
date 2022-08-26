@@ -2,18 +2,40 @@
 
 class catagory{
 
-    public static function add(){
+    public static function add($conn,$request){
 
         $sql ="INSERT INTO `catagory`(`catagory`) VALUES (?)";
-
+        $stmt = $conn->prepare($sql);
+        return $stmt->execute($request);
     }
 
     public static function fetch($conn){
 
-        $sql ="SELECT * FROM `catagory` LIMIT 0,1000";
+        $sql ="SELECT * FROM `catagory` WHERE `status`<>'Delete' LIMIT 0,1000";
         $stmt = $conn->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public static function view($conn,$request){
+
+        $sql ="SELECT * FROM `catagory` WHERE `catagory_id`=:id LIMIT 0,1000";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute([':id'=>$request]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public static function total_product($conn,$id){
+        $sql="SELECT COUNT(product_id) AS total FROM products WHERE products.`status` <> 'Delete' AND products.catagory_id = :id";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute([":id"=>$id]);
+        $product = $sql->fetch();
+        if($product == false){
+            $total = 0;
+        }else{
+            $total = $product['total']; 
+        }
+        return $total;
     }
 
     public static function count_product_group($conn,$id){
@@ -41,10 +63,11 @@ class catagory{
 
     }
 
-    public static function update(){
+    public static function update($conn,$request){
 
-        $sql ="UPDATE `catagory` SET `catagory` =? WHERE `catagory_id` = ?";
-
+        $sql ="UPDATE `catagory` SET `catagory` =?, `status` =? WHERE `catagory_id` =?";
+        $stmt = $conn->prepare($sql);
+        return $stmt->execute($request);
     } 
 
     public static function change_status(){
@@ -53,10 +76,11 @@ class catagory{
 
     }
 
-    public static function delete(){
+    public static function delete($conn,$request){
 
-        $sql = "UPDATE `catagory` SET `action` = '2' WHERE `catagory_id` =?";
-
+        $sql = "UPDATE `catagory` SET `status` = 'Delete' WHERE `catagory_id` =:id";
+        $stmt = $conn->prepare($sql);
+        return $stmt->execute([':id'=>$request]);
     }
 }
 

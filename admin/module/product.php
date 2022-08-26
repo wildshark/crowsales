@@ -2,31 +2,72 @@
 
 class product{
 
-    public static function add(){
+    public static function add($conn,$request){
 
-        $sql ="INSERT INTO `products`(`catalogy_id`, `brand_id`, `product_name`, `product_sku`, `description`, `discount`, `price`) VALUES (?,?,?,?,?,?,?)";
+        $sql ="INSERT INTO `products`(`catagory_id`, `brand_id`, `product_name`, `product_sku`, `description`, `discount`, `price`, `tax`) VALUES (?,?, ?, ?, ?, ?,?,?)";
+        $stmt = $conn->prepare($sql);
+        return $stmt->execute($request);
     }
 
-    public static function update(){
+    public static function update($conn,$request){
 
-        $sql  ="UPDATE `products` SET `catalogy_id` = 11, `brand_id` = 11, `product_name` = ?, `product_sku` = ?, `description` = ?, `discount` = ?, `price` = 11 WHERE `product_id` = ?";
+        $sql ="UPDATE `products` SET `catagory_id` = ?, `brand_id` = ?, `product_name` = ?, `product_sku` = ?, `description` = ?, `discount` = ?, `price` = ?, `tax` = ?, `status` = ? WHERE `product_id` =?";
+        $stmt = $conn->prepare($sql);
+        return $stmt->execute($request);
     }
 
     public static function fetch($conn){
 
-        $sql ="SELECT products.*, catagory.catagory, brand.brand, brand.image FROM products INNER JOIN catagory ON products.catalogy_id = catagory.catagory_id INNER JOIN brand ON products.brand_id = brand.brand_id";
+        $sql ="SELECT
+        products.*, 
+        brand.brand, 
+        catagory.catagory
+    FROM
+        products
+        INNER JOIN
+        brand
+        ON 
+            products.brand_id = brand.brand_id
+        INNER JOIN
+        catagory
+        ON 
+            products.catagory_id = catagory.catagory_id
+    WHERE
+        products.`status` <> 'Delete'";
         $stmt = $conn->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public static function view(){
+    public static function view($conn,$id){
+
+        $sql="SELECT
+        products.*, 
+        brand.brand, 
+        catagory.catagory
+    FROM
+        products
+        INNER JOIN
+        brand
+        ON 
+            products.brand_id = brand.brand_id
+        INNER JOIN
+        catagory
+        ON 
+            products.catagory_id = catagory.catagory_id
+    WHERE
+        products.product_id = :id";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute([':id'=>$id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
 
     }
 
-    public static function delete(){
+    public static function delete($conn,$id){
         
-        $sql ="UPDATE `products` SET `status` = 'Delete' WHERE `product_id` =?";
+        $sql ="UPDATE `products` SET `status` = 'Delete' WHERE `product_id` =:id";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute([':id'=>$id]);
     }
 
 

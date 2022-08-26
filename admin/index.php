@@ -14,7 +14,9 @@ include("module/purchase.php");
 
 if(!isset($_REQUEST['submit'])){
     if(!isset($_REQUEST['main'])){
+        session_destroy();
         require("frame/login.php");
+
     }else{
         if($_GET['token'] !== GenToken($_SESSION['usrID'],$_SESSION['strID'])){
             header("location: ?token=false");
@@ -83,29 +85,86 @@ if(!isset($_REQUEST['submit'])){
                     }
                 break;
 
-                case"productlist";
-                    $data = product::fetch($conn);
-                    $view ="views/product.php";
+                case"product";
+                    if($_REQUEST['ui'] ==="list"){
+                        $data = product::fetch($conn);
+                        $view ="views/product/product.php";
+                    }elseif($_REQUEST['ui'] ==="edit"){
+                        $data = product::view($conn,$_GET['id']);
+                        if($data == false){
+                            $catagoryID = "";
+                            $brandID = "";
+                            $name = "";
+                            $sku = "";
+                            $details = "";
+                            $discount = "0";
+                            $price = "0.00";
+                            $status = "";
+                            $brand = "";
+                            $tax = "0";
+                            $catagory = "";
+                        }else{
+                            $_SESSION['record_id'] = $data['product_id'];
+                            $catagoryID = $data['catagory_id'];
+                            $brandID = $data['brand_id'];
+                            $name = $data['product_name'];
+                            $sku = $data['product_sku'];
+                            $details = $data['description'];
+                            $discount = $data['discount'];
+                            $tax = $data['tax'];
+                            $price = $data['price'];
+                            $status = $data['status'];
+                            $brand = $data['brand'];
+                            $catagory = $data['catagory'];
+                        }
+                        $view ="views/product/edit.php";
+                    }
                 break;
 
-                case"categorylist";
-                    $page['title'] ="Catagory List";
-                    $page['subtitle']= "Manage your Product Catagory";
-                    $page['type'] = "Catagory";
-                    $table_title="<tr>
-                    <th>#</th>
-                    <th>Catagory</th>
-                    <th>Products</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                    </tr>";
-                    $data = catagory::fetch($conn);
-                    $view = "views/catagory.php";
+                case"catagory";
+                    if($_REQUEST['ui']==="list"){
+                        $page['title'] ="Catagory List";
+                        $page['subtitle']= "Manage your Product Catagory";
+                        $page['type'] = "Catagory";
+                        $table_title="<tr>
+                        <th>#</th>
+                        <th>Catagory</th>
+                        <th>Products</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                        </tr>";
+                        $data = catagory::fetch($conn);
+                        $view = "views/catagory/catagory.php";
+                    }elseif($_REQUEST['ui']==="edit"){
+                        $data = catagory::view($conn,$_GET['id']);
+                        if($data == false){
+                            $catagory = "";
+                            $status = "";
+                        }else{
+                            $catagory = $data['catagory'];
+                            $status = $data['status'];
+                            $_SESSION['record_id'] = $data['catagory_id'];
+                        }
+                        $view = "views/catagory/edit.php";
+                    }
                 break;
 
-                case"brandlist";
-                    $data = brand::fetch($conn);
-                    $view = "views/brand.php";
+                case"brand";
+                    if($_REQUEST['ui'] === "list"){
+                        $data = brand::fetch($conn);
+                        $view = "views/brand/brand.php";
+                    }elseif($_REQUEST['ui'] === "add"){
+                        $data = brand::view($conn,$_GET['id']);
+                        if($data == false){
+                            $brand ="";
+                            $status="";
+                        }else{
+                            $_SESSION['record_id'] = $data['brand_id'];
+                            $brand = $data['brand'];
+                            $status = $data['status'];
+                        }
+                        $view = "views/brand/edit.php";
+                    }
                 break;
 
                 case"saleslist";
@@ -243,13 +302,14 @@ if(!isset($_REQUEST['submit'])){
 
         case"brand";
             if($action === "add"){
-                $q[] = $_REQUEST['brand-add'];
-                $q[] = $_REQUEST['image'];
+                $q[] = $_REQUEST['name'];
                 $response = brand::add($conn,$q);
+                var_dump($response);
+                exit;
             }elseif($action === "update"){
-                $q[] = $_REQUEST['brand-add'];
-                $q[] = $_REQUEST['image'];
-                $q[] = $_REQUEST['id'];
+                $q[] = $_REQUEST['name'];
+                $q[] = $_REQUEST['status'];
+                $q[] = $_SESSION['record_id'];
                 $response = brand::update($conn,$q);
             }elseif($action === "delete"){
                 $q[] = $_REQUEST['id'];
@@ -259,15 +319,59 @@ if(!isset($_REQUEST['submit'])){
 
         case"catagory";
             if($action === "add"){
-                $q[] = $_REQUEST['catagory-name'];
-                $response = catagory::add($conn,$q);
+                $q[] = $_REQUEST['name'];
+                if(false == catagory::add($conn,$q)){
+                    $url = array(
+                        "main"=>"catagory",
+                        "ui"=>"list",
+                        "token"=>$_COOKIE['token'],
+                        "er"=>100
+                    );                    
+                }else{
+                    $url = array(
+                        "main"=>"catagory",
+                        "ui"=>"list",
+                        "token"=>$_COOKIE['token'],
+                        "er"=>200
+                    );
+                }
+                
             }elseif($action === "update"){
-                $q[] = $_REQUEST['catagory-name'];
-                $q[] = $_REQUEST['id'];
-                $response = catagory::update($conn,$q);
+                $q[] = $_REQUEST['name'];
+                $q[] = $_REQUEST['status'];
+                $q[] = $_SESSION['record_id'];
+                if(false == catagory::update($conn,$q)){
+                    $url = array(
+                        "main"=>"catagory",
+                        "ui"=>"list",
+                        "token"=>$_COOKIE['token'],
+                        "er"=>100
+                    );
+                }else{
+                    $url = array(
+                        "main"=>"catagory",
+                        "ui"=>"list",
+                        "id"=>$_SESSION['record_id'],
+                        "token"=>$_COOKIE['token'],
+                        "er"=>200
+                    );
+                }
             }elseif($action === "delete"){
-                $q[] = $_REQUEST['id'];
-                $response = catagory::delete($conn,$q);
+                if(false == catagory::delete($conn,$_GET['id'])){
+                    $url = array(
+                        "main"=>"catagory",
+                        "ui"=>"list",
+                        "token"=>$_COOKIE['token'],
+                        "er"=>100
+                    );
+                }else{
+                    $url = array(
+                        "main"=>"catagory",
+                        "ui"=>"list",
+                        "token"=>$_COOKIE['token'],
+                        "er"=>200
+                    );
+                }
             }
         break;
 
@@ -275,23 +379,71 @@ if(!isset($_REQUEST['submit'])){
             if($action === "add"){
                 $q[] = $_REQUEST['catagory'];
                 $q[] = $_REQUEST['brand'];
-                $q[] = $_REQUEST['name'];
-                $q[] = $_REQUEST['sku'];
-                $q[] = $_REQUEST['details'];
+                $q[] = $_REQUEST['product-name'];
+                $q[] = $_REQUEST['product-sku'];
+                $q[] = $_REQUEST['note'];
                 $q[] = $_REQUEST['discount'];
                 $q[] = $_REQUEST['price'];
-
+                $q[] = $_REQUEST['tax'];
+                if(false == product::add($conn,$q)){
+                    $url = array(
+                        "main"=>"product",
+                        "ui"=>"list",
+                        "token"=>$_COOKIE['token'],
+                        "er"=>100
+                    );
+                }else{
+                    $url = array(
+                        "main"=>"product",
+                        "ui"=>"list",
+                        "token"=>$_COOKIE['token'],
+                        "er"=>200
+                    );
+                }
             }elseif($action === "update"){
                 $q[] = $_REQUEST['catagory'];
                 $q[] = $_REQUEST['brand'];
-                $q[] = $_REQUEST['name'];
-                $q[] = $_REQUEST['sku'];
-                $q[] = $_REQUEST['details'];
+                $q[] = $_REQUEST['product-name'];
+                $q[] = $_REQUEST['product-sku'];
+                $q[] = $_REQUEST['note'];
                 $q[] = $_REQUEST['discount'];
                 $q[] = $_REQUEST['price'];
+                $q[] = $_REQUEST['tax'];
                 $q[] = $_REQUEST['status'];
-                
+                $q[] = $_SESSION['record_id'];
+                if(false == product::update($conn,$q)){
+                    $url = array(
+                        "main"=>"product",
+                        "ui"=>"list",
+                        "id"=>$_SESSION['record_id'],
+                        "token"=>$_COOKIE['token'],
+                        "er"=>100
+                    );
+                }else{
+                    $url = array(
+                        "main"=>"product",
+                        "ui"=>"edit",
+                        "id"=>$_SESSION['record_id'],
+                        "token"=>$_COOKIE['token'],
+                        "er"=>200
+                    );
+                }
             }elseif($action === "delete"){
+                if(false == product::delete($conn,$_REQUEST['id'])){
+                    $url = array(
+                        "main"=>"product",
+                        "ui"=>"list",
+                        "token"=>$_COOKIE['token'],
+                        "er"=>200
+                    );
+                }else{
+                    $url = array(
+                        "main"=>"product",
+                        "ui"=>"list",
+                        "token"=>$_COOKIE['token'],
+                        "er"=>100
+                    );
+                }
 
             }
         break;
