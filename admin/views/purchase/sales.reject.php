@@ -1,11 +1,11 @@
 <div class="page-header">
     <div class="page-title">
-        <h4>Purchase Reject List</h4>
-        <h6>Manage your purchase reject</h6>
+        <h4>Sales Reject List</h4>
+        <h6>Manage your sales reject</h6>
     </div>
     <div class="page-btn">
-        <a href="#" class="btn btn-added">
-            <img src="assets/img/icons/plus.svg" alt="img" class="me-2">Add  Purchase</a>
+        <a href="#" class="btn btn-added"><img src="assets/img/icons/plus.svg" alt="img" class="me-2">Add
+            SalesReject </a>
     </div>
 </div>
 
@@ -78,7 +78,7 @@
         </div>
 
         <div class="table-responsive">
-            <table class="table datanew">
+            <table class="table  datanew">
                 <thead>
                     <tr>
                         <th>#</th>
@@ -94,7 +94,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?=PurchaseRejectList($data)?>
+                    <?=RejectBook($conn)?>
                 </tbody>
             </table>
         </div>

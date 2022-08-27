@@ -31,8 +31,10 @@
         <a href="javascript:void(0);"><img src="assets/img/icons/purchase1.svg" alt="img"><span>
                 Purchase</span> <span class="menu-arrow"></span></a>
         <ul>
-            <li><a href="?main=purchase&ui=list&token=<?=$_GET['token']?>">Purchase List</a></li>
-            <li><a href="?main=purchasereturn&ui=lists&token=<?=$_GET['token']?>">Purchase Reject</a></li>
+            <li><a href="?main=purchase&ui=list&token=<?=$_GET['token']?>">Purchase</a></li>
+            <li><a href="?main=purchase&ui=purchasebook&token=<?=$_GET['token']?>">Purchase List</a></li>
+            <li><a href="?main=purchase&ui=reject&token=<?=$_GET['token']?>">Purchase Reject</a></li>
+            <li><a href="?main=purchase&ui=rejectlist&token=<?=$_GET['token']?>">Purchase Return List</a></li>
         </ul>
     </li>
     <li class="submenu">

@@ -183,7 +183,7 @@ if(!isset($_REQUEST['submit'])){
 
                 case"sales";
                     if($_REQUEST['ui'] ==="list"){
-                        $view = "views/sales/main.php";
+                        $view = "views/purchase/main.php";
                     }elseif($_REQUEST['ui']==="details"){
                         $_SESSION['invoiceID'] = $_GET['id'];
                         $invoice = sales::get_invoice($conn,$_GET['id']);
@@ -197,11 +197,11 @@ if(!isset($_REQUEST['submit'])){
                         }
                         $update = transaction::UpdateInvoiceSalesTransaction($conn,$_GET['id']);
                         $subTotal = transaction::InvoiceSubTotal($conn,$_GET['id']);
-                        $view = "views/sales/invoice.php";
+                        $view = "views/purchase/invoice.php";
                     }elseif($_REQUEST['ui'] ==="salesbook"){
-                        $view = "views/sales/details.php";
+                        $view = "views/purchase/details.php";
                     }elseif($_REQUEST['ui'] === "reject"){
-                        $view = "views/sales/reject.main.php";
+                        $view = "views/purchase/reject.main.php";
                     }elseif($_REQUEST['ui']==="reject-details"){
                         $_SESSION['invoiceID'] = $_GET['id'];
                         $invoice = sales::get_invoice($conn,$_GET['id']);
@@ -215,20 +215,50 @@ if(!isset($_REQUEST['submit'])){
                         }
                         $update = transaction::UpdateInvoiceSalesRejectTransaction($conn,$_GET['id']);
                         $subTotal = transaction::InvoiceRejectSubTotal($conn,$_GET['id']);
-                        $view = "views/sales/reject.details.php";
+                        $view = "views/purchase/reject.details.php";
                     }elseif($_REQUEST['ui']==="rejectlist"){
-                        $view = "views/sales/sales.reject.php";
+                        $view = "views/purchase/sales.reject.php";
                     }
                 break;
 
-                case"purchaselist";
-                    $data = purchase::fetch($conn);
-                    $view = "views/purchase.php";
-                break;
-
-                case"purchasereturnlists";
-                    $data = purchase::reject($conn);
-                    $view = "views/purchase.reject.php";
+                case"purchase";
+                    if($_REQUEST['ui'] ==="list"){
+                        $view = "views/purchase/main.php";
+                    }elseif($_REQUEST['ui']==="details"){
+                        $_SESSION['invoiceID'] = $_GET['id'];
+                        $invoice = sales::get_invoice($conn,$_GET['id']);
+                        if($invoice == false){
+                            $date = "";
+                            $ref = "";
+                        }else{
+                            $date = $invoice['invo_date'];
+                            $ref = $invoice['ref'];
+                            setcookie("InvoiceDate",$date);
+                        }
+                        $update = transaction::UpdateInvoiceSalesTransaction($conn,$_GET['id']);
+                        $subTotal = transaction::InvoiceSubTotal($conn,$_GET['id']);
+                        $view = "views/purchase/invoice.php";
+                    }elseif($_REQUEST['ui'] ==="salesbook"){
+                        $view = "views/purchase/details.php";
+                    }elseif($_REQUEST['ui'] === "reject"){
+                        $view = "views/purchase/reject.main.php";
+                    }elseif($_REQUEST['ui']==="reject-details"){
+                        $_SESSION['invoiceID'] = $_GET['id'];
+                        $invoice = sales::get_invoice($conn,$_GET['id']);
+                        if($invoice == false){
+                            $date = "";
+                            $ref = "";
+                        }else{
+                            $date = $invoice['invo_date'];
+                            $ref = $invoice['ref'];
+                            setcookie("InvoiceDate",$date);
+                        }
+                        $update = transaction::UpdateInvoiceSalesRejectTransaction($conn,$_GET['id']);
+                        $subTotal = transaction::InvoiceRejectSubTotal($conn,$_GET['id']);
+                        $view = "views/purchase/reject.details.php";
+                    }elseif($_REQUEST['ui']==="rejectlist"){
+                        $view = "views/purchase/sales.reject.php";
+                    }
                 break;
 
             }
@@ -754,6 +784,16 @@ if(!isset($_REQUEST['submit'])){
                         );
                     }
                 }
+            }
+        break;
+
+        case"purchase";
+            if($action ==="add"){
+
+            }elseif($action ==="update"){
+
+            }elseif($action ==="delete"){
+
             }
         break;
 
