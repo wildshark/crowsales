@@ -1,7 +1,7 @@
 <div class="page-header">
     <div class="page-title">
-        <h4>Sales List</h4>
-        <h6>Manage your sales</h6>
+        <h4>Purchase List</h4>
+        <h6>Manage your purchase</h6>
     </div>
     <div class="page-btn">
         <a href="#" data-bs-toggle="modal" data-bs-target="#addForm" class="btn btn-added"><img src="assets/img/icons/plus.svg" alt="img" class="me-2">Add Sales</a>
@@ -9,7 +9,7 @@
             <div class="modal-dialog modal-md">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Add Sales</h5>
+                        <h5 class="modal-title">Add Purchase</h5>
                         <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span
                                 aria-hidden="true">×</span></button>
                     </div>
@@ -43,7 +43,7 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="submit" name="submit" value="sales-reject-add" class="btn btn-submit">Submit</button>
+                            <button type="submit" name="submit" value="purchase-reject-add" class="btn btn-submit">Submit</button>
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         </div>
                     </form>
@@ -137,7 +137,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?=SalesRejectInvoices($conn)?>
+                    <?=PurchaseRejectInvoices($conn)?>
                 </tbody>
             </table>
         </div>

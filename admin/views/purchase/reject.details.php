@@ -59,7 +59,7 @@
                     </div>
                 </div>
                 <div class="col-lg-12">
-                    <button type="submit" name="submit" value="sales-reject-returnitem" class="btn btn-submit me-2">Submit</button>
+                    <button type="submit" name="submit" value="purchase-reject-returnitem" class="btn btn-submit me-2">Submit</button>
                 </div>
             </div>
         </form>
@@ -84,7 +84,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <?=InvoiceSaleRejectData($conn)?>
+                        <?=InvoicePurchaseRejectData($conn)?>
                     </tbody>
                 </table>
             </div>

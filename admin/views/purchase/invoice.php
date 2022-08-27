@@ -59,7 +59,7 @@
                     </div>
                 </div>
                 <div class="col-lg-12">
-                    <button type="submit" name="submit" value="sales-details-add" class="btn btn-submit me-2">Submit</button>
+                    <button type="submit" name="submit" value="purchase-details-add" class="btn btn-submit me-2">Submit</button>
                 </div>
             </div>
         </form>
@@ -84,7 +84,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <?=InvoiceSalesData($conn)?>
+                        <?=InvoicePurchaseData($conn)?>
                     </tbody>
                 </table>
             </div>

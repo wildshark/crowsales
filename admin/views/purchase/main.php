@@ -43,7 +43,7 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="submit" name="submit" value="sales-main-add" class="btn btn-submit">Submit</button>
+                            <button type="submit" name="submit" value="purchase-main-add" class="btn btn-submit">Submit</button>
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         </div>
                     </form>
@@ -137,7 +137,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?=SalesInvoices($conn)?>
+                    <?=PurchaseInvoices($conn)?>
                 </tbody>
             </table>
         </div>

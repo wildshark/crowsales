@@ -1,7 +1,7 @@
 <div class="page-header">
     <div class="page-title">
-        <h4>Sales List</h4>
-        <h6>Manage your sales</h6>
+        <h4>Purchase List</h4>
+        <h6>Manage your purchase</h6>
     </div>
     <div class="page-btn">
         <a href="#" data-bs-toggle="modal" data-bs-target="#addForm" class="btn btn-added"><img src="assets/img/icons/plus.svg" alt="img" class="me-2">Add Sales</a>
@@ -43,7 +43,7 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="submit" name="submit" value="sales-main-add" class="btn btn-submit">Submit</button>
+                            <button type="submit" name="submit" value="purchase-main-add" class="btn btn-submit">Submit</button>
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         </div>
                     </form>
@@ -138,7 +138,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?=SalesBook($conn)?>
+                    <?=PurchaseBook($conn)?>
                 </tbody>
             </table>
         </div>

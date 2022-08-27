@@ -1,11 +1,11 @@
 <div class="page-header">
     <div class="page-title">
-        <h4>Sales Reject List</h4>
-        <h6>Manage your sales reject</h6>
+        <h4>Purchase Reject List</h4>
+        <h6>Manage your purchase reject</h6>
     </div>
     <div class="page-btn">
         <a href="#" class="btn btn-added"><img src="assets/img/icons/plus.svg" alt="img" class="me-2">Add
-            SalesReject </a>
+            PurchaseReject </a>
     </div>
 </div>
 
@@ -94,7 +94,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?=RejectBook($conn)?>
+                    <?=PurchaseRejectBook($conn)?>
                 </tbody>
             </table>
         </div>

@@ -196,7 +196,7 @@ if(!isset($_REQUEST['submit'])){
                             setcookie("InvoiceDate",$date);
                         }
                         $update = transaction::UpdateInvoiceSalesTransaction($conn,$_GET['id']);
-                        $subTotal = transaction::InvoiceSubTotal($conn,$_GET['id']);
+                        $subTotal = transaction::InvoiceSalesSubTotal($conn,$_GET['id']);
                         $view = "views/purchase/invoice.php";
                     }elseif($_REQUEST['ui'] ==="salesbook"){
                         $view = "views/purchase/details.php";
@@ -235,8 +235,8 @@ if(!isset($_REQUEST['submit'])){
                             $ref = $invoice['ref'];
                             setcookie("InvoiceDate",$date);
                         }
-                        $update = transaction::UpdateInvoiceSalesTransaction($conn,$_GET['id']);
-                        $subTotal = transaction::InvoiceSubTotal($conn,$_GET['id']);
+                        $update = transaction::UpdateInvoicePurchaseTransaction($conn,$_GET['id']);
+                        $subTotal = transaction::InvoicePurchaseSubTotal($conn,$_GET['id']);
                         $view = "views/purchase/invoice.php";
                     }elseif($_REQUEST['ui'] ==="salesbook"){
                         $view = "views/purchase/details.php";
@@ -253,7 +253,7 @@ if(!isset($_REQUEST['submit'])){
                             $ref = $invoice['ref'];
                             setcookie("InvoiceDate",$date);
                         }
-                        $update = transaction::UpdateInvoiceSalesRejectTransaction($conn,$_GET['id']);
+                        $update = transaction::UpdateInvoicePurchaseRejectTransaction($conn,$_GET['id']);
                         $subTotal = transaction::InvoiceRejectSubTotal($conn,$_GET['id']);
                         $view = "views/purchase/reject.details.php";
                     }elseif($_REQUEST['ui']==="rejectlist"){

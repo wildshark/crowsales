@@ -98,6 +98,7 @@ class sales{
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+    
 }
 
 ?>
