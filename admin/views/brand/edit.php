@@ -12,7 +12,7 @@
                 <div class="col-lg-6 col-sm-12 col-12">
                     <div class="form-group">
                         <label>Brand</label>
-                        <input type="text" name="name" value="<?=$catagory?>">
+                        <input type="text" name="name" value="<?=$brand?>">
                     </div>
                 </div>
                 <div class="col-lg-6 col-sm-12 col-12">

@@ -18,8 +18,10 @@
         <a href="javascript:void(0);"><img src="assets/img/icons/sales1.svg" alt="img"><span>
                 Sales</span> <span class="menu-arrow"></span></a>
         <ul>
-            <li><a href="?main=sales&ui=list&token=<?=$_GET['token']?>">Sales List</a></li>
-            <li><a href="?main=salesreturn&ui=lists&token=<?=$_GET['token']?>">Sales Return List</a></li>
+            <li><a href="?main=sales&ui=list&token=<?=$_GET['token']?>">Invoices</a></li>
+            <li><a href="?main=sales&ui=salesbook&token=<?=$_GET['token']?>">Sales List</a></li>
+            <li><a href="?main=sales&ui=reject&token=<?=$_GET['token']?>">Return Item</a></li>
+            <li><a href="?main=sales&ui=rejectlist&token=<?=$_GET['token']?>">Sales Return List</a></li>
             <!--li><a href="?main=pos&token=<?=$_GET['token']?>">POS</a></li-->
             <!--li><a href="?main=pos&token=<?=$_GET['token']?>">New Sales</a></li-->
             <!--li><a href="?main=createsalesreturns&token=<?=$_GET['token']?>">New Sales Return</a></li-->

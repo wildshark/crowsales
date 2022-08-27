@@ -94,7 +94,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?=SalesRejectList($data)?>
+                    <?=RejectBook($conn)?>
                 </tbody>
             </table>
         </div>

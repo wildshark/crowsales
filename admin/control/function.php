@@ -26,6 +26,22 @@ function CatagoryCombo($conn){
     return $output;
 }
 
+function ProductCombe($conn){
+    $output ="";
+    $data = product::available($conn);
+    if($data == false){
+        $output ="";
+    }else{
+        foreach($data as $r){
+            $id = $r['product_id'];
+            $sku = $r['product_sku'];
+            $name = $r['product_name'];
+            $output .="<option value='$id'>$sku - $name</option>";
+        }
+    }
+    return $output;
+}
+
 function BrandCombo($conn){
     $output ="";
     $data = brand::fetch($conn);
@@ -280,10 +296,10 @@ function BrandList($data){
             <td>$name</td>
             <td class='$css'>$status</td>
             <td>
-                <a class='me-3' href='?main=brand&id=$id&token=$token'>
+                <a class='me-3' href='?main=brand&ui=edit&id=$id&token=$token'>
                     <img src='assets/img/icons/edit.svg' alt='img'>
                 </a>
-                <a class='me-3 confirm-text' href='?submit=brand-delete&id=$id'>
+                <a class='me-3' href='?submit=brand-delete&id=$id'>
                     <img src='assets/img/icons/delete.svg' alt='img'>
                 </a>
             </td>
@@ -293,7 +309,8 @@ function BrandList($data){
     return $output;
 }
 
-function SalesList($data){
+function SalesBook($conn){
+    $data = sales::sales_book($conn);
     $output="";
     if((!isset($data))||($data == false)){
         $output="";
@@ -333,7 +350,8 @@ function SalesList($data){
     return $output;
 }
 
-function SalesRejectList($data){
+function RejectBook($conn){
+    $data = sales::reject_book($conn);
     $output="";
     if((!isset($data))||($data == false)){
         $output="";
@@ -351,102 +369,210 @@ function SalesRejectList($data){
             $name = $r['product_name'];
             $ref = $r['ref'];
             $price = $r['price'];
+            $qty = $r['reject'];
+            $store = $r['store_name'];
+            $usrn =  $r['fname'];
+            $amt = number_format($price * $qty,2);
+            
+            $output .="<tr>
+            <td>$n</td>
+            <td>$date</td>
+            <td>$sku</td>
+            <td>$name</td>
+            <td>$ref</td>
+            <td>$price</td>
+            <td>$qty</td> 
+            <td>$amt</td>
+            <td>$store</td>
+            <td>$usrn</td>
+        </tr>";
+        }
+    }
+    return $output;
+}
+
+function SalesInvoices($conn){
+    $data = sales::fetch_inovices($conn);
+    $output="";
+    if((!isset($data))||($data == false)){
+        $output="";
+    }else{
+        foreach ($data as $r){
+            if(!isset($n)){
+                $n = 1;
+            }else{
+                $n = $n + 1;
+            }
+
+            $id = $r['invoice_id'];
+            $date = $r['invo_date'];
+            $ref = $r['ref'];
+            $qty = $r['qty'];
+            $subtotal = $r['subtotal'];
+            $discount = $r['discount'];
+            $tax = $r['tax'];
+            $amt = number_format($r['amount'],2);
+            $paid = 0;
+            $store =  $r['store_name'];
+            $usrn =  $r['fname'];
+            $token = $_GET['token'];
+            
+            $output .="<tr>
+            <td>$n</td>
+            <td>$date</td>
+            <td>$ref</td>
+            <td>$qty</td> 
+            <td>$amt</td>
+            <td>$paid</td>
+            <td>$store</td>
+            <td>$usrn</td>
+            <td>
+                <a class='me-3' href='?main=sales&ui=details&id=$id&token=$token'>
+                    <img src='assets/img/icons/edit.svg' alt='img'>
+                </a>
+                <a class='me-3' href='?submit=transaction-delete&id=$id'>
+                    <img src='assets/img/icons/delete.svg' alt='img'>
+                </a>
+            </td>
+        </tr>";
+        }
+    }
+    return $output;
+}
+
+function SalesRejectInvoices($conn){
+    $data = sales::fetch_reject_inovices($conn);
+    $output="";
+    if((!isset($data))||($data == false)){
+        $output="";
+    }else{
+        foreach ($data as $r){
+            if(!isset($n)){
+                $n = 1;
+            }else{
+                $n = $n + 1;
+            }
+
+            $id = $r['invoice_id'];
+            $date = $r['invo_date'];
+            $ref = $r['ref'];
+            $qty = $r['qty'];
+            $subtotal = $r['subtotal'];
+            $discount = $r['discount'];
+            $tax = $r['tax'];
+            $amt = number_format($r['amount'],2);
+            $paid = 0;
+            $store =  $r['store_name'];
+            $usrn =  $r['fname'];
+            $token = $_GET['token'];
+            
+            $output .="<tr>
+            <td>$n</td>
+            <td>$date</td>
+            <td>$ref</td>
+            <td>$qty</td> 
+            <td>$amt</td>
+            <td>$paid</td>
+            <td>$store</td>
+            <td>$usrn</td>
+            <td>
+                <a class='me-3' href='?main=sales&ui=reject-details&id=$id&token=$token'>
+                    <img src='assets/img/icons/edit.svg' alt='img'>
+                </a>
+                <a class='me-3' href='?submit=transaction-delete&id=$id'>
+                    <img src='assets/img/icons/delete.svg' alt='img'>
+                </a>
+            </td>
+        </tr>";
+        }
+    }
+    return $output;
+}
+
+function InvoiceSalesData($conn){
+    $data = sales::list_details_sold($conn,$_GET['id']);
+    $output="";
+    if((!isset($data))||($data == false)){
+        $output="";
+    }else{
+        foreach ($data as $r){
+            if(!isset($n)){
+                $n = 1;
+            }else{
+                $n = $n + 1;
+            }
+
+            $id = $r['tran_id'];
+            $sku = $r['product_sku'];
+            $product = $r['product_name'];
+            $price = number_format($r['price'],2);
+            $qty = $r['sold'];
+            $discount = 0;
+            $tax = 0;
+            $amount = number_format($r['amt'],2);
+            
+            
+            $output .="<tr>
+            <td>$n</td>
+            <td class='productimgname'>
+                <a class='product-img'>
+                    <img src='assets/img/product/product8.jpg' alt='product'>
+                </a>
+                <a href='javascript:void(0);'>$sku - $product</a>
+            </td>
+            <td>$qty</td>
+            <td>$price</td>
+            <td>$discount</td>
+            <td>$tax</td>
+            <td>$amount</td>
+            <td>
+                <a href='?submit=sales-details-delete&id=$id' class='delete-set'><img src='assets/img/icons/delete.svg'alt='svg'></a>
+            </td>
+        </tr>";
+        }
+    }
+    return $output;
+}
+
+function InvoiceSaleRejectData($conn){
+    $data = sales::list_details_reject($conn,$_GET['id']);
+    $output="";
+    if((!isset($data))||($data == false)){
+        $output="";
+    }else{
+        foreach ($data as $r){
+            if(!isset($n)){
+                $n = 1;
+            }else{
+                $n = $n + 1;
+            }
+
+            $id = $r['tran_id'];
+            $sku = $r['product_sku'];
+            $product = $r['product_name'];
+            $price = number_format($r['price'],2);
             $qty = $r['return'];
-            $store = $r['store_name'];
-            $usrn =  $r['fname'];
-            $amt = number_format($price * $qty,2);
+            $discount = 0;
+            $tax = 0;
+            $amount = number_format($r['amt'],2);
+            
             
             $output .="<tr>
             <td>$n</td>
-            <td>$date</td>
-            <td>$sku</td>
-            <td>$name</td>
-            <td>$ref</td>
+            <td class='productimgname'>
+                <a class='product-img'>
+                    <img src='assets/img/product/product8.jpg' alt='product'>
+                </a>
+                <a href='javascript:void(0);'>$sku - $product</a>
+            </td>
+            <td>$qty</td>
             <td>$price</td>
-            <td>$qty</td> 
-            <td>$amt</td>
-            <td>$store</td>
-            <td>$usrn</td>
-        </tr>";
-        }
-    }
-    return $output;
-}
-
-function PurchaseList($data){
-    $output="";
-    if((!isset($data))||($data == false)){
-        $output="";
-    }else{
-        foreach ($data as $r){
-            if(!isset($n)){
-                $n = 1;
-            }else{
-                $n = $n + 1;
-            }
-
-            $id = $r['tran_id'];
-            $date = $r['tran_date'];
-            $sku = $r['product_sku'];
-            $name = $r['product_name'];
-            $ref = $r['ref'];
-            $price = $r['price'];
-            $qty = $r['purchase'];
-            $store = $r['store_name'];
-            $usrn =  $r['fname'];
-            $amt = number_format($price * $qty,2);
-            
-            $output .="<tr>
-            <td>$n</td>
-            <td>$date</td>
-            <td>$sku</td>
-            <td>$name</td>
-            <td>$ref</td>
-            <td>$price</td>
-            <td>$qty</td> 
-            <td>$amt</td>
-            <td>$store</td>
-            <td>$usrn</td>
-        </tr>";
-        }
-    }
-    return $output;
-}
-
-function PurchaseRejectList($data){
-    $output="";
-    if((!isset($data))||($data == false)){
-        $output="";
-    }else{
-        foreach ($data as $r){
-            if(!isset($n)){
-                $n = 1;
-            }else{
-                $n = $n + 1;
-            }
-
-            $id = $r['tran_id'];
-            $date = $r['tran_date'];
-            $sku = $r['product_sku'];
-            $name = $r['product_name'];
-            $ref = $r['ref'];
-            $price = $r['price'];
-            $qty = $r['purchase'];
-            $store = $r['store_name'];
-            $usrn =  $r['fname'];
-            $amt = number_format($price * $qty,2);
-            
-            $output .="<tr>
-            <td>$n</td>
-            <td>$date</td>
-            <td>$sku</td>
-            <td>$name</td>
-            <td>$ref</td>
-            <td>$price</td>
-            <td>$qty</td> 
-            <td>$amt</td>
-            <td>$store</td>
-            <td>$usrn</td>
+            <td>$discount</td>
+            <td>$tax</td>
+            <td>$amount</td>
+            <td>
+                <a href='?submit=sales-reject-delete&id=$id' class='delete-set'><img src='assets/img/icons/delete.svg'alt='svg'></a>
+            </td>
         </tr>";
         }
     }

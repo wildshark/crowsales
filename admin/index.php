@@ -11,6 +11,15 @@ include("module/catagory.php");
 include("module/brand.php");
 include("module/sales.php");
 include("module/purchase.php");
+include("module/transaction.php");
+
+/*
+1 purchase,
+2 reject
+3 sold
+4 return
+5 transfer
+*/
 
 if(!isset($_REQUEST['submit'])){
     if(!isset($_REQUEST['main'])){
@@ -22,6 +31,11 @@ if(!isset($_REQUEST['submit'])){
             header("location: ?token=false");
         }else{
             $_SESSION['token'] = $_GET['token'];
+            if(!isset($_REQUEST['ui'])){
+                $_SESSION['ui'] ="";
+            }else{
+                $_SESSION['ui'] = $_REQUEST['ui'];
+            }
             switch($_REQUEST['main']){
 
                 case"dashboard";
@@ -153,7 +167,7 @@ if(!isset($_REQUEST['submit'])){
                     if($_REQUEST['ui'] === "list"){
                         $data = brand::fetch($conn);
                         $view = "views/brand/brand.php";
-                    }elseif($_REQUEST['ui'] === "add"){
+                    }elseif($_REQUEST['ui'] === "edit"){
                         $data = brand::view($conn,$_GET['id']);
                         if($data == false){
                             $brand ="";
@@ -167,14 +181,44 @@ if(!isset($_REQUEST['submit'])){
                     }
                 break;
 
-                case"saleslist";
-                    $data = sales::fetch($conn);
-                    $view = "views/sales.php";
-                break;
-
-                case"salesreturnlists";
-                    $data = sales::reject($conn);
-                    $view = "views/sales.reject.php";
+                case"sales";
+                    if($_REQUEST['ui'] ==="list"){
+                        $view = "views/sales/main.php";
+                    }elseif($_REQUEST['ui']==="details"){
+                        $_SESSION['invoiceID'] = $_GET['id'];
+                        $invoice = sales::get_invoice($conn,$_GET['id']);
+                        if($invoice == false){
+                            $date = "";
+                            $ref = "";
+                        }else{
+                            $date = $invoice['invo_date'];
+                            $ref = $invoice['ref'];
+                            setcookie("InvoiceDate",$date);
+                        }
+                        $update = transaction::UpdateInvoiceSalesTransaction($conn,$_GET['id']);
+                        $subTotal = transaction::InvoiceSubTotal($conn,$_GET['id']);
+                        $view = "views/sales/invoice.php";
+                    }elseif($_REQUEST['ui'] ==="salesbook"){
+                        $view = "views/sales/details.php";
+                    }elseif($_REQUEST['ui'] === "reject"){
+                        $view = "views/sales/reject.main.php";
+                    }elseif($_REQUEST['ui']==="reject-details"){
+                        $_SESSION['invoiceID'] = $_GET['id'];
+                        $invoice = sales::get_invoice($conn,$_GET['id']);
+                        if($invoice == false){
+                            $date = "";
+                            $ref = "";
+                        }else{
+                            $date = $invoice['invo_date'];
+                            $ref = $invoice['ref'];
+                            setcookie("InvoiceDate",$date);
+                        }
+                        $update = transaction::UpdateInvoiceSalesRejectTransaction($conn,$_GET['id']);
+                        $subTotal = transaction::InvoiceRejectSubTotal($conn,$_GET['id']);
+                        $view = "views/sales/reject.details.php";
+                    }elseif($_REQUEST['ui']==="rejectlist"){
+                        $view = "views/sales/sales.reject.php";
+                    }
                 break;
 
                 case"purchaselist";
@@ -197,7 +241,7 @@ if(!isset($_REQUEST['submit'])){
         }
     }
 }else{
-//var_dump($_REQUEST);
+//var_dump($_REQUEST);/
 //exit;
     $submit = explode("-",$_REQUEST['submit']);
     $command = $submit[0];
@@ -303,17 +347,57 @@ if(!isset($_REQUEST['submit'])){
         case"brand";
             if($action === "add"){
                 $q[] = $_REQUEST['name'];
-                $response = brand::add($conn,$q);
-                var_dump($response);
-                exit;
+                if(false == brand::add($conn,$q)){
+                    $url = array(
+                        "main"=>"brand",
+                        "ui"=>"list",
+                        "token"=>$_COOKIE['token'],
+                        "er"=>100
+                    );
+                }else{
+                    $url = array(
+                        "main"=>"brand",
+                        "ui"=>"list",
+                        "token"=>$_COOKIE['token'],
+                        "er"=>200
+                    );
+                }
             }elseif($action === "update"){
                 $q[] = $_REQUEST['name'];
                 $q[] = $_REQUEST['status'];
                 $q[] = $_SESSION['record_id'];
-                $response = brand::update($conn,$q);
+                if(false == brand::update($conn,$q)){
+                    $url = array(
+                        "main"=>"brand",
+                        "ui"=>"list",
+                        "token"=>$_COOKIE['token'],
+                        "er"=>100
+                    );
+                }else{
+                    $url = array(
+                        "main"=>"brand",
+                        "ui"=>"list",
+                        "id"=>$_SESSION['record_id'],
+                        "token"=>$_COOKIE['token'],
+                        "er"=>200
+                    );
+                }
             }elseif($action === "delete"){
-                $q[] = $_REQUEST['id'];
-                $response = brand::delete($conn,$q);
+                if(false == brand::delete($conn,$_REQUEST['id'])){
+                    $url = array(
+                        "main"=>"brand",
+                        "ui"=>"list",
+                        "token"=>$_COOKIE['token'],
+                        "er"=>100
+                    );
+                }else{
+                    $url = array(
+                        "main"=>"brand",
+                        "ui"=>"list",
+                        "token"=>$_COOKIE['token'],
+                        "er"=>200
+                    );
+                }
             }
         break;
 
@@ -511,27 +595,185 @@ if(!isset($_REQUEST['submit'])){
             }
         break;
 
-        case"invoice";
-            if($action ==="add"){
-                $q[] = $_SESSION['storeID'];
-                $q[] = $_SESSION['usrID'];
-                $q[] = $_SESSION['typeID'];
-                $q[] = $_REQUEST['date'];
-                $q[] = $_REQUEST['ref'];
-                $q[] = $_REQUEST['details'];
-            }elseif($action ==="update"){
-                $q[] = $_REQUEST['date'];
-                $q[] = $_REQUEST['ref'];
-                $q[] = $_REQUEST['details'];
-                $q[] = $_SESSION['record_id'];
-            }elseif($action ==="delete"){
-
+        case"sales";
+            if($action ==="main"){
+                if($submit[2] === "add"){
+                    $q[] = $_SESSION['strID'];
+                    $q[] = $_SESSION['usrID'];
+                    $q[] = 3;
+                    $q[] = date("Y-m-d",strtotime($_REQUEST['date']));
+                    $q[] = $_REQUEST['ref'];
+                    $q[] = $_REQUEST['details'];
+                    $response = sales::add_main($conn,$q);
+                    if($response == false){
+                        $url = array(
+                            "main"=>"sales",
+                            "ui"=>"list",
+                            "token"=>$_COOKIE['token'],
+                            "er"=>100
+                        );
+                    }else{
+                        $url = array(
+                            "main"=>"sales",
+                            "ui"=>"details",
+                            "id"=>$response,
+                            "token"=>$_COOKIE['token'],
+                            "er"=>200
+                        );
+                    }
+                }
+            }elseif($action === "details"){
+                if($submit[2] === "add"){
+                    $q[] = $_SESSION['invoiceID'];
+                    $q[] = $_SESSION['strID'];
+                    $q[] = $_SESSION['usrID'];
+                    $q[] = 3;
+                    if((!isset($_REQUEST['price']))||($_REQUEST['price'] == 0)){
+                        $product = product::view($conn,$_REQUEST['product']);
+                        $q[] = $_REQUEST['product'];
+                        $q[] = $_COOKIE['InvoiceDate'];
+                        $q[] = $product['price'];
+                        $q[] = $_REQUEST['qty']; 
+                    }else{
+                        $q[] = $_REQUEST['product']; 
+                        $q[] = $_COOKIE['InvoiceDate'];
+                        $q[] = $_REQUEST['price'];
+                        $q[] = $_REQUEST['qty'];   
+                    }
+                    $response = sales::add_details_sold($conn,$q);
+                    if($response === false){
+                        $url = array(
+                            "main"=>"sales",
+                            "ui"=>"list",
+                            "token"=>$_COOKIE['token'],
+                            "er"=>100
+                        );
+                    }else{
+                        $url = array(
+                            "main"=>"sales",
+                            "ui"=>"details",
+                            "id"=>$_SESSION['invoiceID'],
+                            "token"=>$_COOKIE['token'],
+                            "er"=>200
+                        );
+                    }
+                }elseif($submit[2] ==="delete"){
+                    if(false == transaction::delete($conn,$_GET['id'])){
+                        $url = array(
+                            "main"=>"sales",
+                            "ui"=>"details",
+                            "id"=>$_SESSION['invoiceID'],
+                            "token"=>$_COOKIE['token'],
+                            "er"=>100
+                        );
+                    }else{
+                        $url = array(
+                            "main"=>"sales",
+                            "ui"=>"details",
+                            "id"=>$_SESSION['invoiceID'],
+                            "token"=>$_COOKIE['token'],
+                            "er"=>200
+                        );
+                    }
+                }
+            }elseif($action ==="reject"){
+                if($submit[2] === "add"){
+                    $q[] = $_SESSION['strID'];
+                    $q[] = $_SESSION['usrID'];
+                    $q[] = 4;
+                    $q[] = date("Y-m-d",strtotime($_REQUEST['date']));
+                    $q[] = $_REQUEST['ref'];
+                    $q[] = $_REQUEST['details'];
+                    $response = sales::add_main($conn,$q);
+                    if($response == false){
+                        $url = array(
+                            "main"=>"sales",
+                            "ui"=>"reject",
+                            "token"=>$_COOKIE['token'],
+                            "er"=>100
+                        );
+                    }else{
+                        $url = array(
+                            "main"=>"sales",
+                            "ui"=>"reject-details",
+                            "id"=>$response,
+                            "token"=>$_COOKIE['token'],
+                            "er"=>200
+                        );
+                    }
+                }elseif($submit[2] === "returnitem"){
+                    $q[] = $_SESSION['invoiceID'];
+                    $q[] = $_SESSION['strID'];
+                    $q[] = $_SESSION['usrID'];
+                    $q[] = 4;
+                    if((!isset($_REQUEST['price']))||($_REQUEST['price'] == 0)){
+                        $product = product::view($conn,$_REQUEST['product']);
+                        $q[] = $_REQUEST['product'];
+                        $q[] = $_COOKIE['InvoiceDate'];
+                        $q[] = $product['price'];
+                        $q[] = $_REQUEST['qty']; 
+                    }else{
+                        $q[] = $_REQUEST['product']; 
+                        $q[] = $_COOKIE['InvoiceDate'];
+                        $q[] = $_REQUEST['price'];
+                        $q[] = $_REQUEST['qty'];   
+                    }
+                    $response = sales::add_details_reject($conn,$q);
+                    if($response === false){
+                        $url = array(
+                            "main"=>"sales",
+                            "ui"=>"reject",
+                            "token"=>$_COOKIE['token'],
+                            "er"=>100
+                        );
+                    }else{
+                        $url = array(
+                            "main"=>"sales",
+                            "ui"=>"reject-details",
+                            "id"=>$_SESSION['invoiceID'],
+                            "token"=>$_COOKIE['token'],
+                            "er"=>200
+                        );
+                    }
+                }elseif($submit[2] === "delete"){
+                    if(false == transaction::delete($conn,$_GET['id'])){
+                        $url = array(
+                            "main"=>"sales",
+                            "ui"=>"reject",
+                            "id"=>$_SESSION['invoiceID'],
+                            "token"=>$_COOKIE['token'],
+                            "er"=>100
+                        );
+                    }else{
+                        $url = array(
+                            "main"=>"sales",
+                            "ui"=>"reject-details",
+                            "id"=>$_SESSION['invoiceID'],
+                            "token"=>$_COOKIE['token'],
+                            "er"=>200
+                        );
+                    }
+                }
             }
         break;
 
-        case"test";
-            if($action ==="add"){
-
+        case"transaction";
+            if($action ==="delete"){
+                if(false == transaction::DeleteInvoice($conn,$_GET['id'])){
+                    $url = array(
+                        "main"=>"sales",
+                        "ui"=>$_SESSION['ui'],
+                        "token"=>$_COOKIE['token'],
+                        "er"=>100
+                    );
+                }else{
+                    $url = array(
+                        "main"=>"sales",
+                        "ui"=>$_SESSION['ui'],
+                        "token"=>$_COOKIE['token'],
+                        "er"=>200
+                    );
+                }
             }elseif($action ==="update"){
 
             }elseif($action ==="delete"){

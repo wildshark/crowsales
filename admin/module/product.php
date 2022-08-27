@@ -39,6 +39,30 @@ class product{
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public static function available($conn){
+
+        $sql ="SELECT
+        products.*, 
+        brand.brand, 
+        catagory.catagory
+    FROM
+        products
+        INNER JOIN
+        brand
+        ON 
+            products.brand_id = brand.brand_id
+        INNER JOIN
+        catagory
+        ON 
+            products.catagory_id = catagory.catagory_id
+    WHERE
+        products.`status` = 'Enable'";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    }
+
     public static function view($conn,$id){
 
         $sql="SELECT
