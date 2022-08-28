@@ -37,11 +37,6 @@ class transfer{
         $stmt = $conn->prepare($sql);
         return $stmt->execute([":id"=>$request]);
     }
-
-    public static function fetch($conn){
-
-        $sql ="242346876";
-    }
 }
 
 ?>
