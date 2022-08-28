@@ -13,6 +13,7 @@ include("module/sales.php");
 include("module/purchase.php");
 include("module/transaction.php");
 include("module/inventory.php");
+include("module/transfer.php");
 
 /*
 1 purchase,
@@ -1022,13 +1023,38 @@ if(!isset($_REQUEST['submit'])){
             }
         break;
 
-        case"test";
+        case"transfer";
             if($action ==="add"){
+                $frm = transfer::get_store($conn,$_SESSION['strID']);
+                $to = transfer::get_store($conn,$_REQUEST['store']);
+                if(($frm == false)||($to == false)){
+                    $url = array(
+                        'main'=>'transfer',
+                        'ui'=>'list',
+                        'token'=>$_COOKIE['token'],
+                        'er'=>100
+                    );
+                }else{
+                    $q[] = $frm['store_id'];
+                    $q[] = $frm['store_name'];
+                    $q[] = $to['store_id'];
+                    $q[] = $frm['store_name'];
+                    $q[] = date("Y-m-d",strtotime($_REQUEST['date']));
+                    $response = transfer::add($conn,$q);
+                    var_dump($response);
+                    exit;
+                    if($response == false){
+                        
+                    }else{
 
-            }elseif($action ==="update"){
-
+                    }
+                }   
             }elseif($action ==="delete"){
+                if(false == transfer::delete($conn,$_REQUEST['id'])){
 
+                }else{
+                    
+                }
             }
         break;
     }
