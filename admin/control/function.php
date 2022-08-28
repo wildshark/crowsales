@@ -809,7 +809,7 @@ function InvoicePurchaseRejectData($conn){
 }
 
 function StoreInventoryData($conn){ 
-    $data = inventory::store_stock($conn,$_GET['id']);
+    $data = inventory::store_stock_details($conn,$_GET['id']);
     $output="";
     if((!isset($data))||($data == false)){
         $output="";
@@ -854,7 +854,8 @@ function StoreInventoryData($conn){
     return $output;
 }
 
-function StoreInventoryMenu($data){
+function StoreInventoryMenu($conn){
+    $data = inventory::store_stock_main($conn);
     $output="";
     if((!isset($data))||($data == false)){
         $output="";
@@ -867,17 +868,51 @@ function StoreInventoryMenu($data){
             }
             $id = $r['store_id'];
             $store = $r['store_name'];
+            $bal = $r['bal'];
             $token = $_GET['token'];
             
             $output .="<tr>
             <td>$n</td>
             <td>$store</td>
+            <td>$bal</td>
             <td>
-                <a class='me-3' href='?main=inventory&frm=store&ui=store-details&id=$id&token=$token'>
+                <a class='me-3' href='?main=inventory&frm=store&ui=store-details&store=$store&bal=$bal&id=$id&token=$token'>
                     <img src='assets/img/icons/edit.svg' alt='img'>
                 </a>
             </td>
         </tr>";
+        }
+    }
+    return $output;
+}
+
+function GenStockInventoryData($conn){ 
+    $data = inventory::general_stock($conn);
+    $output="";
+    if((!isset($data))||($data == false)){
+        $output="";
+    }else{
+        foreach ($data as $r){
+            if(!isset($n)){
+                $n = 1;
+            }else{
+                $n = $n + 1;
+            }
+
+            $sku = $r['product_sku'];
+            $product = $r['product_name'];
+            $catagory = $r['catagory'];
+            $brand = $r['brand'];
+            $bal = $r['bal'];
+            
+            $output .="<tr>
+            <td>$n</td>
+            <td>$sku</td>
+            <td>$product</td>
+            <td>$brand</td>
+            <td>$catagory</td>
+            <td>$bal</td>
+            </tr>";
         }
     }
     return $output;

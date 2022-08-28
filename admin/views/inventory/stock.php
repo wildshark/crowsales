@@ -1,11 +1,7 @@
 <div class="page-header">
     <div class="page-title">
-        <h4>Brand List</h4>
-        <h6>Manage your brand</h6>
-    </div>
-    <div class="page-btn">
-        <a href="#" data-bs-toggle="modal" data-bs-target="#addbrand" class="btn btn-added"><img src="assets/img/icons/plus.svg" alt="img" class="me-2">Add
-            Brand</a>
+        <h4><?=$page_title?></h4>
+        <h6><?=$page_sub_title?></h6>
     </div>
 </div>
 <div class="card">
@@ -79,7 +75,7 @@
         <div class="table-responsive">
             <table class="table  datanew">
                 <thead>
-                    <?=$title?>
+                    <?=$thead?>
                 </thead>
                 <tbody>
                     <?=$tbody?>

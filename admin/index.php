@@ -264,19 +264,34 @@ if(!isset($_REQUEST['submit'])){
 
                 case"inventory";
                     if($_REQUEST['frm'] ==="stock"){
-
+                        $page_title = "Inventory";
+                        $page_sub_title ="All products";
+                        $thead ="<tr>
+                        <th>#</th>
+                        <th>SKU</th>  
+                        <th>Product</th>
+                        <th>Brand</th>
+                        <th>Catagory</th>                   
+                        <th>Bal</th>
+                        </tr>";
+                        $tbody = GenStockInventoryData($conn);
+                        $view = "views/inventory/stock.php";
                     }elseif($_REQUEST['frm'] === "store"){
                         if($_REQUEST['ui'] === "store-main"){
-                            $title="<tr>
+                            $page_title ="Store Inventories";
+                            $page_sub_title ="Inventory summary for all store(s)";
+                            $thead="<tr>
                             <th>#</th>
                             <th>Store Name</th>
+                            <th>Stock</th>
                             <th>Action</th>
                             </tr>";
-                            $data = store::fetch($conn);
-                            $tbody = StoreInventoryMenu($data);
-                            $view = "views/inventory/store.php";
+                            $tbody = StoreInventoryMenu($conn);
+                            $view = "views/inventory/stock.php";
                         }elseif($_REQUEST['ui'] === "store-details"){
-                            $title ="<tr>
+                            $page_title = "Store :".$_GET['store'];
+                            $page_sub_title = "Store ".$_GET['store']." Total Stock ".$_GET['bal'];
+                            $thead ="<tr>
                             <th>#</th>
                             <th>Product</th>
                             <th>Purchase</th>
