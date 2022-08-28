@@ -15,6 +15,16 @@
         </ul>
     </li>
     <li class="submenu">
+        <a href="javascript:void(0);"><img src="assets/img/icons/purchase1.svg" alt="img"><span>
+                Purchase</span> <span class="menu-arrow"></span></a>
+        <ul>
+            <li><a href="?main=purchase&ui=list&token=<?=$_GET['token']?>">Purchase</a></li>
+            <li><a href="?main=purchase&ui=purchasebook&token=<?=$_GET['token']?>">Purchase List</a></li>
+            <li><a href="?main=purchase&ui=reject&token=<?=$_GET['token']?>">Purchase Reject</a></li>
+            <li><a href="?main=purchase&ui=rejectlist&token=<?=$_GET['token']?>">Purchase Return List</a></li>
+        </ul>
+    </li>
+    <li class="submenu">
         <a href="javascript:void(0);"><img src="assets/img/icons/sales1.svg" alt="img"><span>
                 Sales</span> <span class="menu-arrow"></span></a>
         <ul>
@@ -28,22 +38,22 @@
         </ul>
     </li>
     <li class="submenu">
-        <a href="javascript:void(0);"><img src="assets/img/icons/purchase1.svg" alt="img"><span>
-                Purchase</span> <span class="menu-arrow"></span></a>
-        <ul>
-            <li><a href="?main=purchase&ui=list&token=<?=$_GET['token']?>">Purchase</a></li>
-            <li><a href="?main=purchase&ui=purchasebook&token=<?=$_GET['token']?>">Purchase List</a></li>
-            <li><a href="?main=purchase&ui=reject&token=<?=$_GET['token']?>">Purchase Reject</a></li>
-            <li><a href="?main=purchase&ui=rejectlist&token=<?=$_GET['token']?>">Purchase Return List</a></li>
-        </ul>
-    </li>
-    <li class="submenu">
         <a href="javascript:void(0);"><img src="assets/img/icons/transfer1.svg" alt="img"><span>
                 Transfer</span> <span class="menu-arrow"></span></a>
         <ul>
             <li><a href="?main=transfer&ui=list&token=<?=$_GET['token']?>">Transfer List</a></li>
             <li><a href="?main=addtransfer&token=<?=$_GET['token']?>">Add Transfer </a></li>
             <li><a href="?main=importtransfer&token=<?=$_GET['token']?>">Import Transfer </a></li>
+        </ul>
+    </li>
+    <li class="submenu">
+        <a href="javascript:void(0);"><img src="assets/img/icons/purchase1.svg" alt="img"><span>
+            Inventories</span> <span class="menu-arrow"></span></a>
+        <ul>
+            <li><a href="?main=inventory&frm=stock&ui=stock&token=<?=$_GET['token']?>">Stock</a></li>
+            <li><a href="?main=inventory&frm=store&ui=store-main&token=<?=$_GET['token']?>">Store</a></li>
+            <li><a href="?main=purchase&ui=reject&token=<?=$_GET['token']?>">Pro</a></li>
+            <li><a href="?main=purchase&ui=rejectlist&token=<?=$_GET['token']?>">Purchase Return List</a></li>
         </ul>
     </li>
     <li class="submenu">

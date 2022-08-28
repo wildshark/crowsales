@@ -674,7 +674,7 @@ function InvoiceSalesData($conn){
 }
 
 function InvoicePurchaseData($conn){ 
-    $data = purchase::list_details_sold($conn,$_GET['id']);
+    $data = purchase::list_details_purchase($conn,$_GET['id']);
     $output="";
     if((!isset($data))||($data == false)){
         $output="";
@@ -763,7 +763,7 @@ function InvoiceSaleRejectData($conn){
     return $output;
 }
 
-function InvoicePurchaseRejectData($conn){
+function InvoicePurchaseRejectData($conn){ 
     $data = purchase::list_details_reject($conn,$_GET['id']);
     $output="";
     if((!isset($data))||($data == false)){
@@ -808,8 +808,8 @@ function InvoicePurchaseRejectData($conn){
     return $output;
 }
 
-function InvoiceSaleRejectData($conn){
-    $data = sales::list_details_reject($conn,$_GET['id']);
+function StoreInventoryData($conn){ 
+    $data = inventory::store_stock($conn,$_GET['id']);
     $output="";
     if((!isset($data))||($data == false)){
         $output="";
@@ -821,16 +821,18 @@ function InvoiceSaleRejectData($conn){
                 $n = $n + 1;
             }
 
-            $id = $r['tran_id'];
             $sku = $r['product_sku'];
             $product = $r['product_name'];
-            $price = number_format($r['price'],2);
-            $qty = $r['return'];
-            $discount = 0;
-            $tax = 0;
-            $amount = number_format($r['amt'],2);
-            
-            
+            $purchase = $r['purchase'];
+            $reject = $r['purchase_reject'];
+            $issus_in = $r['issuse_in'];
+            $issus_out = $r['issuse_out'];
+            $sold = $r['sold'];
+            $return = $r['sales_reject'];
+
+            $bal_purchase = $purchase - $reject;
+            $bal_stock = (($bal_purchase + $issus_in) - $issus_out);
+            $bal = (($bal_stock - $sold) + $return);
             $output .="<tr>
             <td>$n</td>
             <td class='productimgname'>
@@ -839,17 +841,46 @@ function InvoiceSaleRejectData($conn){
                 </a>
                 <a href='javascript:void(0);'>$sku - $product</a>
             </td>
-            <td>$qty</td>
-            <td>$price</td>
-            <td>$discount</td>
-            <td>$tax</td>
-            <td>$amount</td>
+            <td>$purchase</td>
+            <td>$reject</td>
+            <td>$issus_in</td>
+            <td>$issus_out</td>
+            <td>$sold</td>
+            <td>$return</td>
+            <td>$bal</td>
+            </tr>";
+        }
+    }
+    return $output;
+}
+
+function StoreInventoryMenu($data){
+    $output="";
+    if((!isset($data))||($data == false)){
+        $output="";
+    }else{
+        foreach ($data as $r){
+            if(!isset($n)){
+                $n = 1;
+            }else{
+                $n = $n + 1;
+            }
+            $id = $r['store_id'];
+            $store = $r['store_name'];
+            $token = $_GET['token'];
+            
+            $output .="<tr>
+            <td>$n</td>
+            <td>$store</td>
             <td>
-                <a href='?submit=sales-reject-delete&id=$id' class='delete-set'><img src='assets/img/icons/delete.svg'alt='svg'></a>
+                <a class='me-3' href='?main=inventory&frm=store&ui=store-details&id=$id&token=$token'>
+                    <img src='assets/img/icons/edit.svg' alt='img'>
+                </a>
             </td>
         </tr>";
         }
     }
     return $output;
 }
+
 ?>

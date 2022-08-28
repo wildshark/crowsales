@@ -41,29 +41,29 @@ class purchase{
          return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public static function add_details_sold($conn,$request){
+    public static function add_details_purchase($conn,$request){
 
-        $sql="INSERT INTO `transaction`(`invoice_id`, `store_id`, `user_id`,`tran_type_id`, `product_id`,  `tran_date`, `price`, `sold`) VALUES (?,?,?,?,?,?,?,?)";
+        $sql="INSERT INTO `transaction`(`invoice_id`, `store_id`, `user_id`,`tran_type_id`, `product_id`,  `tran_date`, `price`, `purchase`) VALUES (?,?,?,?,?,?,?,?)";
         $stmt = $conn->prepare($sql);
         return $stmt->execute($request);
     }
 
     public static function add_details_reject($conn,$request){
 
-        $sql="INSERT INTO `transaction`(`invoice_id`, `store_id`, `user_id`, `tran_type_id`, `product_id`,  `tran_date`, `price`, `return`) VALUES (?,?,?,?,?,?,?,?)";
+        $sql="INSERT INTO `transaction`(`invoice_id`, `store_id`, `user_id`, `tran_type_id`, `product_id`,  `tran_date`, `price`, `reject`) VALUES (?,?,?,?,?,?,?,?)";
         $stmt = $conn->prepare($sql);
         return $stmt->execute($request);
     }
 
-    public static function list_details_sold($conn,$id){
-        $sql ="SELECT `transaction`.tran_id, `transaction`.invoice_id, `transaction`.product_id, products.product_name, products.product_sku, `transaction`.sold,`transaction`.price,(`transaction`.price * `transaction`.sold) as amt, `transaction`.details FROM `transaction` INNER JOIN products ON `transaction`.product_id = products.product_id WHERE `transaction`.invoice_id =:id ";
+    public static function list_details_purchase($conn,$id){
+        $sql ="SELECT `transaction`.tran_id, `transaction`.invoice_id, `transaction`.product_id, products.product_name, products.product_sku, `transaction`.purchase,`transaction`.price,(`transaction`.price * `transaction`.purchase) as amt, `transaction`.details FROM `transaction` INNER JOIN products ON `transaction`.product_id = products.product_id WHERE `transaction`.invoice_id =:id ";
         $stmt = $conn->prepare($sql);
         $stmt->execute([":id"=>$id]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public static function list_details_reject($conn,$id){
-        $sql ="SELECT `transaction`.tran_id, `transaction`.invoice_id, `transaction`.product_id, products.product_name, products.product_sku, `transaction`.`return`,`transaction`.price, (`transaction`.price * `transaction`.`return`) as amt, `transaction`.details FROM `transaction` INNER JOIN products ON `transaction`.product_id = products.product_id WHERE `transaction`.invoice_id =:id";
+        $sql ="SELECT `transaction`.tran_id, `transaction`.invoice_id, `transaction`.product_id, products.product_name, products.product_sku, `transaction`.`reject`,`transaction`.price, (`transaction`.price * `transaction`.`reject`) as amt, `transaction`.details FROM `transaction` INNER JOIN products ON `transaction`.product_id = products.product_id WHERE `transaction`.invoice_id =:id";
         $stmt = $conn->prepare($sql);
         $stmt->execute([":id"=>$id]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -86,15 +86,15 @@ class purchase{
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public static function TotalSold($conn,$request){
-        $sql ="SELECT `transaction`.tran_type_id, sum(`transaction`.price * `transaction`.sold) AS total FROM `transaction` WHERE `transaction`.tran_type_id = 1 GROUP BY `transaction`.tran_type_id";
+    public static function TotalPurchase($conn,$request){
+        $sql ="SELECT `transaction`.tran_type_id, sum(`transaction`.price * `transaction`.purchase) AS total FROM `transaction` WHERE `transaction`.tran_type_id = 1 GROUP BY `transaction`.tran_type_id";
         $stmt = $conn->prepare($sql);
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
     public static function TotalReject($conn,$request){
-        $sql ="SELECT `transaction`.tran_type_id, sum(`transaction`.price * `transaction`.`return`) AS total FROM `transaction` WHERE `transaction`.tran_type_id = 1 GROUP BY `transaction`.tran_type_id";
+        $sql ="SELECT `transaction`.tran_type_id, sum(`transaction`.price * `transaction`.`reject`) AS total FROM `transaction` WHERE `transaction`.tran_type_id = 2 GROUP BY `transaction`.tran_type_id";
         $stmt = $conn->prepare($sql);
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);

@@ -12,6 +12,7 @@ include("module/brand.php");
 include("module/sales.php");
 include("module/purchase.php");
 include("module/transaction.php");
+include("module/inventory.php");
 
 /*
 1 purchase,
@@ -238,7 +239,7 @@ if(!isset($_REQUEST['submit'])){
                         $update = transaction::UpdateInvoicePurchaseTransaction($conn,$_GET['id']);
                         $subTotal = transaction::InvoicePurchaseSubTotal($conn,$_GET['id']);
                         $view = "views/purchase/invoice.php";
-                    }elseif($_REQUEST['ui'] ==="salesbook"){
+                    }elseif($_REQUEST['ui'] ==="purchasebook"){
                         $view = "views/purchase/details.php";
                     }elseif($_REQUEST['ui'] === "reject"){
                         $view = "views/purchase/reject.main.php";
@@ -257,10 +258,43 @@ if(!isset($_REQUEST['submit'])){
                         $subTotal = transaction::InvoiceRejectSubTotal($conn,$_GET['id']);
                         $view = "views/purchase/reject.details.php";
                     }elseif($_REQUEST['ui']==="rejectlist"){
-                        $view = "views/purchase/sales.reject.php";
+                        $view = "views/purchase/purchase.reject.php";
                     }
                 break;
 
+                case"inventory";
+                    if($_REQUEST['frm'] ==="stock"){
+
+                    }elseif($_REQUEST['frm'] === "store"){
+                        if($_REQUEST['ui'] === "store-main"){
+                            $title="<tr>
+                            <th>#</th>
+                            <th>Store Name</th>
+                            <th>Action</th>
+                            </tr>";
+                            $data = store::fetch($conn);
+                            $tbody = StoreInventoryMenu($data);
+                            $view = "views/inventory/store.php";
+                        }elseif($_REQUEST['ui'] === "store-details"){
+                            $title ="<tr>
+                            <th>#</th>
+                            <th>Product</th>
+                            <th>Purchase</th>
+                            <th>Purchase reject</th>
+                            <th>Issus In</th>
+                            <th>Issus Out</th>
+                            <th>Sold</th>
+                            <th>Sold Return</th>                            
+                            <th>Bal</th>
+                            </tr>";
+                            $tbody = StoreInventoryData($conn);
+                            $view = "views/inventory/stock.php";
+                        }
+                    }elseif($action ==="product"){
+                        $inventory = inventory::stock_product($conn,$id);
+                    }
+
+                break;
             }
 
             if($_REQUEST['main'] ==="dashboard"){
@@ -271,7 +305,7 @@ if(!isset($_REQUEST['submit'])){
         }
     }
 }else{
-//var_dump($_REQUEST);/
+//var_dump($_REQUEST);
 //exit;
     $submit = explode("-",$_REQUEST['submit']);
     $command = $submit[0];
@@ -788,12 +822,164 @@ if(!isset($_REQUEST['submit'])){
         break;
 
         case"purchase";
-            if($action ==="add"){
-
-            }elseif($action ==="update"){
-
-            }elseif($action ==="delete"){
-
+            if($action ==="main"){
+                if($submit[2] === "add"){
+                    $q[] = $_SESSION['strID'];
+                    $q[] = $_SESSION['usrID'];
+                    $q[] = 1;
+                    $q[] = date("Y-m-d",strtotime($_REQUEST['date']));
+                    $q[] = $_REQUEST['ref'];
+                    $q[] = $_REQUEST['details'];
+                    $response = purchase::add_main($conn,$q);
+                    if($response == false){
+                        $url = array(
+                            "main"=>"purchase",
+                            "ui"=>"list",
+                            "token"=>$_COOKIE['token'],
+                            "er"=>100
+                        );
+                    }else{
+                        $url = array(
+                            "main"=>"purchase",
+                            "ui"=>"details",
+                            "id"=>$response,
+                            "token"=>$_COOKIE['token'],
+                            "er"=>200
+                        );
+                    }
+                }
+            }elseif($action === "details"){
+                if($submit[2] === "add"){
+                    $q[] = $_SESSION['invoiceID'];
+                    $q[] = $_SESSION['strID'];
+                    $q[] = $_SESSION['usrID'];
+                    $q[] = 3;
+                    if((!isset($_REQUEST['price']))||($_REQUEST['price'] == 0)){
+                        $product = product::view($conn,$_REQUEST['product']);
+                        $q[] = $_REQUEST['product'];
+                        $q[] = $_COOKIE['InvoiceDate'];
+                        $q[] = $product['price'];
+                        $q[] = $_REQUEST['qty']; 
+                    }else{
+                        $q[] = $_REQUEST['product']; 
+                        $q[] = $_COOKIE['InvoiceDate'];
+                        $q[] = $_REQUEST['price'];
+                        $q[] = $_REQUEST['qty'];   
+                    }
+                    $response = purchase::add_details_purchase($conn,$q);
+                    if($response === false){
+                        $url = array(
+                            "main"=>"purchase",
+                            "ui"=>"list",
+                            "token"=>$_COOKIE['token'],
+                            "er"=>100
+                        );
+                    }else{
+                        $url = array(
+                            "main"=>"purchase",
+                            "ui"=>"details",
+                            "id"=>$_SESSION['invoiceID'],
+                            "token"=>$_COOKIE['token'],
+                            "er"=>200
+                        );
+                    }
+                }elseif($submit[2] ==="delete"){
+                    if(false == transaction::delete($conn,$_GET['id'])){
+                        $url = array(
+                            "main"=>"purchase",
+                            "ui"=>"details",
+                            "id"=>$_SESSION['invoiceID'],
+                            "token"=>$_COOKIE['token'],
+                            "er"=>100
+                        );
+                    }else{
+                        $url = array(
+                            "main"=>"purchase",
+                            "ui"=>"details",
+                            "id"=>$_SESSION['invoiceID'],
+                            "token"=>$_COOKIE['token'],
+                            "er"=>200
+                        );
+                    }
+                }
+            }elseif($action ==="reject"){
+                if($submit[2] === "add"){
+                    $q[] = $_SESSION['strID'];
+                    $q[] = $_SESSION['usrID'];
+                    $q[] = 4;
+                    $q[] = date("Y-m-d",strtotime($_REQUEST['date']));
+                    $q[] = $_REQUEST['ref'];
+                    $q[] = $_REQUEST['details'];
+                    $response = purchase::add_main($conn,$q);
+                    if($response == false){
+                        $url = array(
+                            "main"=>"purchase",
+                            "ui"=>"reject",
+                            "token"=>$_COOKIE['token'],
+                            "er"=>100
+                        );
+                    }else{
+                        $url = array(
+                            "main"=>"purchase",
+                            "ui"=>"reject-details",
+                            "id"=>$response,
+                            "token"=>$_COOKIE['token'],
+                            "er"=>200
+                        );
+                    }
+                }elseif($submit[2] === "returnitem"){
+                    $q[] = $_SESSION['invoiceID'];
+                    $q[] = $_SESSION['strID'];
+                    $q[] = $_SESSION['usrID'];
+                    $q[] = 4;
+                    if((!isset($_REQUEST['price']))||($_REQUEST['price'] == 0)){
+                        $product = product::view($conn,$_REQUEST['product']);
+                        $q[] = $_REQUEST['product'];
+                        $q[] = $_COOKIE['InvoiceDate'];
+                        $q[] = $product['price'];
+                        $q[] = $_REQUEST['qty']; 
+                    }else{
+                        $q[] = $_REQUEST['product']; 
+                        $q[] = $_COOKIE['InvoiceDate'];
+                        $q[] = $_REQUEST['price'];
+                        $q[] = $_REQUEST['qty'];   
+                    }
+                    $response = purchase::add_details_reject($conn,$q);
+                    if($response === false){
+                        $url = array(
+                            "main"=>"purchase",
+                            "ui"=>"reject",
+                            "token"=>$_COOKIE['token'],
+                            "er"=>100
+                        );
+                    }else{
+                        $url = array(
+                            "main"=>"purchase",
+                            "ui"=>"reject-details",
+                            "id"=>$_SESSION['invoiceID'],
+                            "token"=>$_COOKIE['token'],
+                            "er"=>200
+                        );
+                    }
+                }elseif($submit[2] === "delete"){
+                    if(false == transaction::delete($conn,$_GET['id'])){
+                        $url = array(
+                            "main"=>"purchase",
+                            "ui"=>"reject",
+                            "id"=>$_SESSION['invoiceID'],
+                            "token"=>$_COOKIE['token'],
+                            "er"=>100
+                        );
+                    }else{
+                        $url = array(
+                            "main"=>"purchase",
+                            "ui"=>"reject-details",
+                            "id"=>$_SESSION['invoiceID'],
+                            "token"=>$_COOKIE['token'],
+                            "er"=>200
+                        );
+                    }
+                }
             }
         break;
 
