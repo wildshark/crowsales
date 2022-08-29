@@ -1,7 +1,7 @@
 <div class="page-header">
     <div class="page-title">
-        <h4>Store Add</h4>
-        <h6>Create new store</h6>
+        <h4>Catagory</h4>
+        <h6>Edit Catagory</h6>
     </div>
 </div>
 

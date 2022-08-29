@@ -46,6 +46,14 @@ class transfer{
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public static function fetch_details($conn){
+
+        $sql ="SELECT `transaction`.*, stock_transfer.from_store_name, stock_transfer.to_store_name FROM `transaction` INNER JOIN stock_transfer ON `transaction`.invoice_id = stock_transfer.invoice_id";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public static function add($conn,$request){
 
         $sql ="INSERT INTO `stock_transfer`(`issus_date`, `from_store_id`, `to_store_id`, `from_store_name`, `to_store_name`,`invoice_id`,`type_id`,`user_id`) VALUES (?,?,?,?,?,?,?,?)";

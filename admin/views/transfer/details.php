@@ -1,7 +1,7 @@
 <div class="page-header">
     <div class="page-title">
-        <h4>Purchase Add</h4>
-        <h6>Add/Update Purchase</h6>
+        <h4>Stock Transfer</h4>
+        <h6>Add/Update Stock Transfer</h6>
     </div>
 </div>
 <div class="card">

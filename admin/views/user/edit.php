@@ -1,7 +1,7 @@
 <div class="page-header">
     <div class="page-title">
-        <h4>Product Add</h4>
-        <h6>Create new product</h6>
+        <h4>User's Profile</h4>
+        <h6>Edit user's profile</h6>
     </div>
 </div>
 

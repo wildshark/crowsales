@@ -1,7 +1,7 @@
 <div class="page-header">
     <div class="page-title">
-        <h4>Sales List</h4>
-        <h6>Manage your sales</h6>
+        <h4>Stock Transfer List</h4>
+        <h6>Manage your stock</h6>
     </div>
     <div class="page-btn">
         <a href="#" data-bs-toggle="modal" data-bs-target="#addForm" class="btn btn-added"><img
@@ -131,9 +131,8 @@
                 </div>
             </div>
         </div>
-
         <div class="table-responsive">
-            <table class="table  datanew">
+            <table class="table datanew">
                 <thead>
                     <tr>
                         <th>#</th>
