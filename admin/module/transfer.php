@@ -38,6 +38,14 @@ class transfer{
         }
     }
 
+    public static function fetch_main($conn){
+
+        $sql ="SELECT invoice.ref, invoice.qty, invoice.amount, useraccount.fname, stock_transfer.* FROM stock_transfer INNER JOIN invoice ON stock_transfer.invoice_id = invoice.invoice_id INNER JOIN useraccount ON invoice.user_id = useraccount.user_id ORDER BY stock_transfer.issus_id DESC";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public static function add($conn,$request){
 
         $sql ="INSERT INTO `stock_transfer`(`issus_date`, `from_store_id`, `to_store_id`, `from_store_name`, `to_store_name`,`invoice_id`,`type_id`,`user_id`) VALUES (?,?,?,?,?,?,?,?)";
@@ -61,9 +69,20 @@ class transfer{
 
     public static function delete($conn,$request){
 
-        $sql="DELETE FROM `stock_transfer` WHERE `issus_id` =:id";
+        $sql="DELETE FROM `stock_transfer` WHERE `invoice_id` =:id";
         $stmt = $conn->prepare($sql);
-        return $stmt->execute([":id"=>$request]);
+        $output = $stmt->execute([":id"=>$request]);
+
+        $sql="DELETE FROM `transaction` WHERE `invoice_id` =:id";
+        $stmt = $conn->prepare($sql);
+        $output = $stmt->execute([":id"=>$request]);
+        
+        $sql="DELETE FROM `invoice` WHERE `invoice_id` =:id";
+        $stmt = $conn->prepare($sql);
+        $output = $stmt->execute([":id"=>$request]);
+
+        return $output;
+
     }
 
     public static function delete_details($conn,$request){

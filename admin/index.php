@@ -1128,8 +1128,23 @@ if(!isset($_REQUEST['submit'])){
                         }
                     
                     }   
+                }elseif($submit[2] ==="delete"){
+                    if(false == transfer::delete($conn,$_REQUEST['id'])){
+                        $url = array(
+                            'main'=>'transfer',
+                            'ui'=>'list',
+                            'token'=>$_COOKIE['token'],
+                            'er'=>100
+                        );
+                    }else{
+                        $url = array(
+                            'main'=>'transfer',
+                            'ui'=>'list',
+                            'token'=>$_COOKIE['token'],
+                            'er'=>200
+                        );
+                    }
                 }
-                
             }elseif($action ==="details"){
                 if($submit[2] ==="add"){
                     $q[] = $_SESSION['invoiceID'];

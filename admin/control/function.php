@@ -1008,4 +1008,50 @@ function InvoiceIssusOutData($conn){
     return $output;
 }
 
+function IssueInvoiceDataMain($conn){
+    $data = transfer::fetch_main($conn);
+    $output="";
+    if((!isset($data))||($data == false)){
+        $output="";
+    }else{
+        foreach ($data as $r){
+            if(!isset($n)){
+                $n = 1;
+            }else{
+                $n = $n + 1;
+            }
+
+            $id = $r['invoice_id'];
+            $date = $r['issus_date'];
+            $ref = $r['ref'];
+            $qty = $r['qty'];
+            $frm = $r['from_store_name'];
+            $to = $r['to_store_name'];
+            $amt = number_format($r['amount'],2);
+            $usrn =  $r['fname'];
+            $token = $_GET['token'];
+            $type = $r['type_id'];
+            $output .="<tr>
+            <td>$n</td>
+            <td>$date</td>
+            <td>$ref</td>
+            <td>$frm</td>
+            <td>$to</td>
+            <td>$qty</td> 
+            <td>$amt</td>
+            <td>$usrn</td>
+            <td>
+                <a class='me-3' href='?main=transfer&ui=details&id=$id&type=$type&token=$token'>
+                    <img src='assets/img/icons/edit.svg' alt='img'>
+                </a>
+                <a class='me-3' href='?submit=transfer-main-delete&id=$id'>
+                    <img src='assets/img/icons/delete.svg' alt='img'>
+                </a>
+            </td>
+        </tr>";
+        }
+    }
+    return $output;
+}
+
 ?>

@@ -139,16 +139,16 @@
                         <th>#</th>
                         <th>Date</th>
                         <th>Ref #</th>
+                        <th>From Store</th>
+                        <th>To Store</th>
                         <th>Qty</th>
-                        <th>Bill</th>
-                        <th>Paid</th>
-                        <th>Store</th>
+                        <th>Amount</th>
                         <th>User</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?=SalesRejectInvoices($conn)?>
+                    <?=IssueInvoiceDataMain($conn)?>
                 </tbody>
             </table>
         </div>
