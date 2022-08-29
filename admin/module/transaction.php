@@ -202,6 +202,59 @@ class transaction{
             return $output['total'];
         }
     }
+
+    public static function UpdateInvoiceIssueTransaction($conn,$type,$id){
+
+        $sql = "SELECT `transaction`.invoice_id, `transaction`.tran_type_id, sum( `transaction`.price * (`transaction`.issuse_in + issuse_out)) AS total, sum((`transaction`.issuse_in + issuse_out)) AS qty FROM `transaction` WHERE `transaction`.tran_type_id =:issuse AND `transaction`.invoice_id =:id GROUP BY `transaction`.tran_type_id,`transaction`.invoice_id";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute([
+            ':issuse'=>$type,
+            ':id'=>$id
+        ]);
+        $invoice = $stmt->fetch(PDO::FETCH_ASSOC);
+        //var_dump($invoice);
+        //exit;
+        if($invoice == false){
+            $subtotal = 0;
+            $discount = 0;
+            $tax = 0;
+            $amt = 0;
+            $qty = 0;
+        }else{
+            $subtotal = $invoice['total'];
+            $discount = 0;
+            $tax = 0;
+            $amt = $invoice['total'];
+            $qty = $invoice['qty'];
+        }
+
+        $sql ="UPDATE `invoice` SET `qty` =:qty, `subtotal` =:total, `discount` =:discount, `tax` =:tax, `amount` =:amt WHERE `invoice_id` =:id";
+        $stmt = $conn->prepare($sql);
+        return $stmt->execute([
+            ":qty"=>$qty,
+            ":total"=>$subtotal,
+            ":discount"=>$discount,
+            ":tax"=>$tax,
+            ":amt"=>$amt,
+            ":id"=>$id
+        ]);
+    }
+
+    public static function InvoiceIssueSubTotal($conn,$type,$id){
+
+        $sql ="SELECT `transaction`.invoice_id, `transaction`.tran_type_id, sum( `transaction`.price * (`transaction`.issuse_in + issuse_out)) AS total, sum((`transaction`.issuse_in + issuse_out)) AS qty FROM `transaction` WHERE `transaction`.tran_type_id =:issuse AND `transaction`.invoice_id =:id GROUP BY `transaction`.tran_type_id,`transaction`.invoice_id";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute([
+            'issuse'=>$type,
+            ':id'=>$id
+        ]);
+        $output = $stmt->fetch(PDO::FETCH_ASSOC);
+        if($output == false){
+            return 0;
+        }else{
+            return $output['total'];
+        }
+    }
 }
  
 ?>

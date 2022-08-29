@@ -4,14 +4,14 @@ class product{
 
     public static function add($conn,$request){
 
-        $sql ="INSERT INTO `products`(`catagory_id`, `brand_id`, `product_name`, `product_sku`, `description`, `discount`, `price`, `tax`) VALUES (?,?, ?, ?, ?, ?,?,?)";
+        $sql ="INSERT INTO `products`(`catagory_id`, `brand_id`, `product_name`, `product_sku`, `description`, `discount`, `price`, `tax`,`purchase_price`) VALUES (?,?,?,?,?,?,?,?,?)";
         $stmt = $conn->prepare($sql);
         return $stmt->execute($request);
     }
 
     public static function update($conn,$request){
 
-        $sql ="UPDATE `products` SET `catagory_id` = ?, `brand_id` = ?, `product_name` = ?, `product_sku` = ?, `description` = ?, `discount` = ?, `price` = ?, `tax` = ?, `status` = ? WHERE `product_id` =?";
+        $sql ="UPDATE `products` SET `catagory_id` = ?, `brand_id` = ?, `product_name` = ?, `product_sku` = ?, `description` = ?, `discount` = ?, `price` = ?, `tax` = ?, `status` = ?,`purchase_price`=? WHERE `product_id` =?";
         $stmt = $conn->prepare($sql);
         return $stmt->execute($request);
     }

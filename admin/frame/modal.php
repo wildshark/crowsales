@@ -222,22 +222,28 @@
                                 <textarea name="note" class="form-control"></textarea>
                             </div>
                         </div>
-                        <div class="col-lg-4 col-sm-12 col-12">
-                            <div class="form-group">
-                                <label>Tax %</label>
-                                <input type="text" name="tax" placeholder="0.00">
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-sm-12 col-12">
+                        <div class="col-lg-3 col-sm-12 col-12">
                             <div class="form-group">
                                 <label>Discount %</label>
                                 <input type="text" name="discount" placeholder="0.00">
                             </div>
                         </div>
-                        <div class="col-lg-4 col-sm-12 col-12">
+                        <div class="col-lg-3 col-sm-12 col-12">
+                            <div class="form-group">
+                                <label>Tax %</label>
+                                <input type="text" name="tax" placeholder="0.00">
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-12 col-12">
                             <div class="form-group">
                                 <label>Selling Price</label>
                                 <input type="text" name="price" placeholder="0.00">
+                            </div>
+                        </div>    
+                        <div class="col-lg-3 col-sm-12 col-12">
+                            <div class="form-group">
+                                <label>Purchase Price</label>
+                                <input type="text" name="purchase_price" placeholder="0.00">
                             </div>
                         </div>                    
                     </div>

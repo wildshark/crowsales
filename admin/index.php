@@ -20,7 +20,8 @@ include("module/transfer.php");
 2 reject
 3 sold
 4 return
-5 transfer
+5 transfer-in
+6 transfer-out
 */
 
 if(!isset($_REQUEST['submit'])){
@@ -114,7 +115,8 @@ if(!isset($_REQUEST['submit'])){
                             $sku = "";
                             $details = "";
                             $discount = "0";
-                            $price = "0.00";
+                            $selling_price = "0.00";
+                            $purchase_price = "0.00";
                             $status = "";
                             $brand = "";
                             $tax = "0";
@@ -129,6 +131,7 @@ if(!isset($_REQUEST['submit'])){
                             $discount = $data['discount'];
                             $tax = $data['tax'];
                             $price = $data['price'];
+                            $purchase_price = $data['purchase_price'];
                             $status = $data['status'];
                             $brand = $data['brand'];
                             $catagory = $data['catagory'];
@@ -310,6 +313,33 @@ if(!isset($_REQUEST['submit'])){
                         $inventory = inventory::stock_product($conn,$id);
                     }
 
+                break;
+
+                case"transfer";
+                    if($_REQUEST['ui'] === "list"){
+                        $view = "views/transfer/main.php";
+                    }elseif($_REQUEST['ui'] ==="details"){
+                        $_SESSION['invoiceID'] = $_GET['id'];
+                        $invoice = transfer::get_invoice($conn,$_GET['id']);
+                        if($invoice == false){
+                            $date = "";
+                            $ref = "";
+                        }else{
+                            $date = $invoice['invo_date'];
+                            $ref = $invoice['ref'];
+                            $transfer = transfer::get_transfer($conn,$_GET['id']);
+                            setcookie("InvoiceDate",$date);
+                            setcookie("type_id",$_GET['type']);
+                        }
+                        if($_GET["type"] == 5){
+                            $_StockDetails = InvoiceIssusInData($conn);
+                        }elseif($_GET["type"] ==6){
+                            $_StockDetails = InvoiceIssusOutData($conn);
+                        }
+                        $update = transaction::UpdateInvoiceIssueTransaction($conn,$_GET['type'],$_GET['id']);
+                        $subTotal = transaction::InvoiceIssueSubTotal($conn,$_GET['type'],$_GET['id']);
+                        $view = "views/transfer/details.php";
+                    }
                 break;
             }
 
@@ -549,6 +579,7 @@ if(!isset($_REQUEST['submit'])){
                 $q[] = $_REQUEST['discount'];
                 $q[] = $_REQUEST['price'];
                 $q[] = $_REQUEST['tax'];
+                $q[] = $_REQUEST['purchase_price'];
                 if(false == product::add($conn,$q)){
                     $url = array(
                         "main"=>"product",
@@ -574,6 +605,7 @@ if(!isset($_REQUEST['submit'])){
                 $q[] = $_REQUEST['price'];
                 $q[] = $_REQUEST['tax'];
                 $q[] = $_REQUEST['status'];
+                $q[] = $_REQUEST['purchase_price'];
                 $q[] = $_SESSION['record_id'];
                 if(false == product::update($conn,$q)){
                     $url = array(
@@ -874,7 +906,7 @@ if(!isset($_REQUEST['submit'])){
                         $product = product::view($conn,$_REQUEST['product']);
                         $q[] = $_REQUEST['product'];
                         $q[] = $_COOKIE['InvoiceDate'];
-                        $q[] = $product['price'];
+                        $q[] = $product['purchase_price'];
                         $q[] = $_REQUEST['qty']; 
                     }else{
                         $q[] = $_REQUEST['product']; 
@@ -1024,36 +1056,141 @@ if(!isset($_REQUEST['submit'])){
         break;
 
         case"transfer";
-            if($action ==="add"){
-                $frm = transfer::get_store($conn,$_SESSION['strID']);
-                $to = transfer::get_store($conn,$_REQUEST['store']);
-                if(($frm == false)||($to == false)){
-                    $url = array(
-                        'main'=>'transfer',
-                        'ui'=>'list',
-                        'token'=>$_COOKIE['token'],
-                        'er'=>100
-                    );
-                }else{
-                    $q[] = $frm['store_id'];
-                    $q[] = $frm['store_name'];
-                    $q[] = $to['store_id'];
-                    $q[] = $frm['store_name'];
-                    $q[] = date("Y-m-d",strtotime($_REQUEST['date']));
-                    $response = transfer::add($conn,$q);
-                    var_dump($response);
-                    exit;
-                    if($response == false){
-                        
+            if($action ==="main"){
+                if($submit[2] === "add"){
+                    $frm = transfer::get_store($conn,$_SESSION['strID']);
+                    $to = transfer::get_store($conn,$_REQUEST['store']);
+                    if(($frm == false)||($to == false)){
+                        $url = array(
+                            'main'=>'transfer',
+                            'ui'=>'list',
+                            'token'=>$_COOKIE['token'],
+                            'er'=>100
+                        );
                     }else{
+                        if($_REQUEST['type'] === "issus-in"){
+                            $invoice[] = $_SESSION['strID'];
+                            $invoice[] = $_SESSION['usrID'];
+                            $invoice[] = $type_id = 5;
+                            $invoice[] = date("Y-m-d",strtotime($_REQUEST['date']));
+                            $invoice[] = $_REQUEST['ref'];
+                            $invoice[] = json_encode([
+                                "status"=>"send-stock",
+                                "to"=>$to['store_name'],
+                                "frm"=>$frm['store_name']
+                            ]);
+                            $invoice_id = transfer::add_main($conn,$invoice);
+                        }else{
+                            $invoice[] = $_SESSION['strID'];
+                            $invoice[] = $_SESSION['usrID'];
+                            $invoice[] = $type_id = 6;
+                            $invoice[] = date("Y-m-d",strtotime($_REQUEST['date']));
+                            $invoice[] = $_REQUEST['ref'];
+                            $invoice[] = json_encode([
+                                "status"=>"receive-stock",
+                                "to"=>$to['store_name'],
+                                "frm"=>$frm['store_name']
+                            ]);
+                            $invoice_id = transfer::add_main($conn,$invoice);
+                        }
+                        if($invoice_id == false){
+                            $url = array(
+                                'main' =>"dasshbaord",
+                                'token'=>$_COOKIE['token'],
+                                'eer'=>100 
+                            );
+                        }else{
 
-                    }
-                }   
-            }elseif($action ==="delete"){
-                if(false == transfer::delete($conn,$_REQUEST['id'])){
-
-                }else{
+                            $q[] = date("Y-m-d",strtotime($_REQUEST['date']));
+                            $q[] = $frm['store_id'];
+                            $q[] = $to['store_id'];
+                            $q[] = $frm['store_name'];
+                            $q[] = $to['store_name'];
+                            $q[] = $invoice_id;
+                            $q[] = $type_id;
+                            $q[] = $_SESSION['usrID'];
+                            $response = transfer::add($conn,$q);
+                            if($response == false){ 
+                                $url = array(
+                                    'main'=>"transfer",
+                                    'ui'=>"list",
+                                    'token'=>$_COOKIE['token']
+                                );
+                            }else{
+                                $url = array(
+                                    'main'=>"transfer",
+                                    'ui'=>"details",
+                                    'id'=>$invoice_id,
+                                    'type'=>$type_id,
+                                    'token'=>$_COOKIE['token']
+                                );
+                            }
+                        }
                     
+                    }   
+                }
+                
+            }elseif($action ==="details"){
+                if($submit[2] ==="add"){
+                    $q[] = $_SESSION['invoiceID'];
+                    $q[] = $_SESSION['strID'];
+                    $q[] = $_SESSION['usrID'];
+                    $q[] = $_COOKIE['type_id'];
+                    if((!isset($_REQUEST['price']))||($_REQUEST['price'] == 0)){
+                        $product = product::view($conn,$_REQUEST['product']);
+                        $q[] = $_REQUEST['product'];
+                        $q[] = $_COOKIE['InvoiceDate'];
+                        $q[] = $product['purchase_price'];
+                        $q[] = $_REQUEST['qty']; 
+                    }else{
+                        $q[] = $_REQUEST['product']; 
+                        $q[] = $_COOKIE['InvoiceDate'];
+                        $q[] = $_REQUEST['price'];
+                        $q[] = $_REQUEST['qty'];   
+                    }
+                    if($_COOKIE['type_id'] == 5){
+                        $response = transfer::add_issus_in($conn,$q);
+                    }elseif($_COOKIE['type_id'] == 6){
+                        $response = transfer::add_issus_out($conn,$q);
+                    }
+                    if($response === false){
+                        $url = array(
+                            "main"=>"transfer",
+                            "ui"=>"list",
+                            "token"=>$_COOKIE['token'],
+                            "er"=>100
+                        );
+                    }else{
+                        $url = array(
+                            "main"=>"transfer",
+                            "ui"=>"details",
+                            "id"=>$_SESSION['invoiceID'],
+                            'type'=>$_COOKIE['type_id'],
+                            "token"=>$_COOKIE['token'],
+                            "er"=>200
+                        );
+                    }
+
+                }elseif($submit[2] === "delete"){
+                    if(false == transfer::delete_details($conn,$_REQUEST['id'])){
+                        $url = array(
+                            "main"=>"transfer",
+                            "ui"=>"details",
+                            "id"=>$_SESSION['invoiceID'],
+                            'type'=>$_COOKIE['type_id'],
+                            "token"=>$_COOKIE['token'],
+                            "er"=>100
+                        );
+                    }else{
+                        $url = array(
+                            "main"=>"transfer",
+                            "ui"=>"details",
+                            "id"=>$_SESSION['invoiceID'],
+                            'type'=>$_COOKIE['type_id'],
+                            "token"=>$_COOKIE['token'],
+                            "er"=>200
+                        );
+                    }
                 }
             }
         break;

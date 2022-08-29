@@ -60,7 +60,13 @@
                 <div class="col-lg-3 col-sm-12 col-12">
                     <div class="form-group">
                         <label>Selling Price</label>
-                        <input type="text" name="price" value="<?=$price?>" placeholder="0.00">
+                        <input type="text" name="price" value="<?=$selling_price?>" placeholder="0.00">
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-12 col-12">
+                    <div class="form-group">
+                        <label>Purchase Price</label>
+                        <input type="text" name="purchase_price" value="<?=$purchase_price?>" placeholder="0.00">
                     </div>
                 </div>
                 <div class="col-lg-3 col-sm-12 col-12">

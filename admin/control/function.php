@@ -918,4 +918,94 @@ function GenStockInventoryData($conn){
     return $output;
 }
 
+function InvoiceIssusInData($conn){
+    $data = transfer::list_details_issuse_in($conn,$_GET['id']);
+    $output="";
+    if((!isset($data))||($data == false)){
+        $output="";
+    }else{
+        foreach ($data as $r){
+            if(!isset($n)){
+                $n = 1;
+            }else{
+                $n = $n + 1;
+            }
+
+            $id = $r['tran_id'];
+            $sku = $r['product_sku'];
+            $product = $r['product_name'];
+            $price = number_format($r['price'],2);
+            $qty = $r['issuse_in'];
+            $discount = 0;
+            $tax = 0;
+            $amount = number_format($r['amt'],2);
+            
+            
+            $output .="<tr>
+            <td>$n</td>
+            <td class='productimgname'>
+                <a class='product-img'>
+                    <img src='assets/img/product/product8.jpg' alt='product'>
+                </a>
+                <a href='javascript:void(0);'>$sku - $product</a>
+            </td>
+            <td>$qty</td>
+            <td>$price</td>
+            <td>$discount</td>
+            <td>$tax</td>
+            <td>$amount</td>
+            <td>
+                <a href='?submit=transfer-details-delete&id=$id' class='delete-set'><img src='assets/img/icons/delete.svg'alt='svg'></a>
+            </td>
+        </tr>";
+        }
+    }
+    return $output; 
+}
+
+function InvoiceIssusOutData($conn){
+    $data = transfer::list_details_issuse_out($conn,$_GET['id']);
+    $output="";
+    if((!isset($data))||($data == false)){
+        $output="";
+    }else{
+        foreach ($data as $r){
+            if(!isset($n)){
+                $n = 1;
+            }else{
+                $n = $n + 1;
+            }
+
+            $id = $r['tran_id'];
+            $sku = $r['product_sku'];
+            $product = $r['product_name'];
+            $price = number_format($r['price'],2);
+            $qty = $r['issuse_out'];
+            $discount = 0;
+            $tax = 0;
+            $amount = number_format($r['amt'],2);
+            
+            
+            $output .="<tr>
+            <td>$n</td>
+            <td class='productimgname'>
+                <a class='product-img'>
+                    <img src='assets/img/product/product8.jpg' alt='product'>
+                </a>
+                <a href='javascript:void(0);'>$sku - $product</a>
+            </td>
+            <td>$qty</td>
+            <td>$price</td>
+            <td>$discount</td>
+            <td>$tax</td>
+            <td>$amount</td>
+            <td>
+                <a href='?submit=transfer-details-delete&id=$id' class='delete-set'><img src='assets/img/icons/delete.svg'alt='svg'></a>
+            </td>
+        </tr>";
+        }
+    }
+    return $output;
+}
+
 ?>

@@ -50,10 +50,8 @@
         <a href="javascript:void(0);"><img src="assets/img/icons/purchase1.svg" alt="img"><span>
             Inventories</span> <span class="menu-arrow"></span></a>
         <ul>
-            <li><a href="?main=inventory&frm=stock&ui=stock&token=<?=$_GET['token']?>">Stock</a></li>
             <li><a href="?main=inventory&frm=store&ui=store-main&token=<?=$_GET['token']?>">Store</a></li>
-            <li><a href="?main=purchase&ui=reject&token=<?=$_GET['token']?>">Pro</a></li>
-            <li><a href="?main=purchase&ui=rejectlist&token=<?=$_GET['token']?>">Purchase Return List</a></li>
+            <li><a href="?main=inventory&frm=stock&ui=stock&token=<?=$_GET['token']?>">Stock</a></li>
         </ul>
     </li>
     <li class="submenu">

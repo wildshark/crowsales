@@ -4,7 +4,8 @@
         <h6>Manage your sales</h6>
     </div>
     <div class="page-btn">
-        <a href="#" data-bs-toggle="modal" data-bs-target="#addForm" class="btn btn-added"><img src="assets/img/icons/plus.svg" alt="img" class="me-2">Add Sales</a>
+        <a href="#" data-bs-toggle="modal" data-bs-target="#addForm" class="btn btn-added"><img
+                src="assets/img/icons/plus.svg" alt="img" class="me-2">Add Sales</a>
         <div class="modal fade" id="addForm" tabindex="-1" aria-labelledby="addbrand" aria-hidden="true">
             <div class="modal-dialog modal-md">
                 <div class="modal-content">
@@ -20,7 +21,8 @@
                                     <div class="form-group">
                                         <label>Date</label>
                                         <div class="input-group">
-                                            <input type="text" name="date" placeholder="DD-MM-YYYY" class="datetimepicker">
+                                            <input type="text" name="date" placeholder="DD-MM-YYYY"
+                                                class="datetimepicker">
                                         </div>
                                     </div>
                                 </div>
@@ -32,18 +34,27 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-12 col-sm-12 col-12">
+                                <div class="col-lg-6 col-sm-12 col-12">
                                     <div class="form-group">
-                                        <label>Invoice To</label>
-                                        <div class="input-group">
-                                            <input type="text" name="details" value="">
-                                        </div>
+                                        <label>Store</label>
+                                        <select name="store" class="select">
+                                            <?=StoreCombo($conn)?>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-sm-12 col-12">
+                                    <div class="form-group">
+                                        <label>Transfer Type</label>
+                                        <select name="type" class="select">
+                                            <option value="issus-out">Send Item</option>
+                                            <option value="issus-in">Receive Item</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="submit" name="submit" value="sales-reject-add" class="btn btn-submit">Submit</button>
+                            <button type="submit" name="submit" value="transfer-main-add" class="btn btn-submit">Submit</button>
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         </div>
                     </form>
