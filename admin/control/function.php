@@ -351,7 +351,7 @@ function SalesBook($conn){
 }
 
 function PurchaseBook($conn){
-    $data = purchase::sales_book($conn);
+    $data = purchase::purchase_book($conn);
     $output="";
     if((!isset($data))||($data == false)){
         $output="";
@@ -471,7 +471,7 @@ function SalesInvoices($conn){
                 <a class='me-3' href='?main=sales&ui=details&id=$id&token=$token'>
                     <img src='assets/img/icons/edit.svg' alt='img'>
                 </a>
-                <a class='me-3' href='?submit=transaction-delete&id=$id'>
+                <a class='me-3' href='?submit=sales-main-delete&id=$id'>
                     <img src='assets/img/icons/delete.svg' alt='img'>
                 </a>
             </td>
@@ -517,10 +517,10 @@ function PurchaseInvoices($conn){
             <td>$store</td>
             <td>$usrn</td>
             <td>
-                <a class='me-3' href='?main=sales&ui=details&id=$id&token=$token'>
+                <a class='me-3' href='?main=purchase&ui=details&id=$id&token=$token'>
                     <img src='assets/img/icons/edit.svg' alt='img'>
                 </a>
-                <a class='me-3' href='?submit=transaction-delete&id=$id'>
+                <a class='me-3' href='?submit=purchase-main-delete&id=$id'>
                     <img src='assets/img/icons/delete.svg' alt='img'>
                 </a>
             </td>

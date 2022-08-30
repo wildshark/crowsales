@@ -69,7 +69,7 @@ class purchase{
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public static function sales_book($conn){
+    public static function purchase_book($conn){
 
         $sql="SELECT `transaction`.*, useraccount.fname, useraccount.username, stores.store_name, products.product_name, products.product_sku, invoice.ref FROM `transaction` INNER JOIN useraccount ON `transaction`.user_id = useraccount.user_id INNER JOIN stores ON `transaction`.store_id = stores.store_id INNER JOIN products ON `transaction`.product_id = products.product_id INNER JOIN invoice ON `transaction`.invoice_id = invoice.invoice_id WHERE `transaction`.tran_type_id = 1";
         $stmt = $conn->prepare($sql);

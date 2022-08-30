@@ -41,9 +41,9 @@
         <a href="javascript:void(0);"><img src="assets/img/icons/transfer1.svg" alt="img"><span>
                 Transfer</span> <span class="menu-arrow"></span></a>
         <ul>
-            <li><a href="?main=transfer&ui=list&token=<?=$_GET['token']?>">Transfer List</a></li>
-            <li><a href="?main=addtransfer&token=<?=$_GET['token']?>">Add Transfer </a></li>
-            <li><a href="?main=importtransfer&token=<?=$_GET['token']?>">Import Transfer </a></li>
+            <li><a href="?main=transfer&ui=list&token=<?=$_GET['token']?>">Transfer</a></li>
+            <li><a href="?main=transfer&ui=listdetails&token=<?=$_GET['token']?>">Transfer List</a></li>
+            <!--li><a href="?main=importtransfer&token=<?=$_GET['token']?>">Import Transfer </a></li-->
         </ul>
     </li>
     <li class="submenu">

@@ -42,6 +42,7 @@ if(!isset($_REQUEST['submit'])){
             switch($_REQUEST['main']){
 
                 case"dashboard";
+
                     $view ="views/dashboard.php";
                 break;
 
@@ -188,7 +189,7 @@ if(!isset($_REQUEST['submit'])){
 
                 case"sales";
                     if($_REQUEST['ui'] ==="list"){
-                        $view = "views/purchase/main.php";
+                        $view = "views/sales/main.php";
                     }elseif($_REQUEST['ui']==="details"){
                         $_SESSION['invoiceID'] = $_GET['id'];
                         $invoice = sales::get_invoice($conn,$_GET['id']);
@@ -202,11 +203,11 @@ if(!isset($_REQUEST['submit'])){
                         }
                         $update = transaction::UpdateInvoiceSalesTransaction($conn,$_GET['id']);
                         $subTotal = transaction::InvoiceSalesSubTotal($conn,$_GET['id']);
-                        $view = "views/purchase/invoice.php";
+                        $view = "views/sales/invoice.php";
                     }elseif($_REQUEST['ui'] ==="salesbook"){
-                        $view = "views/purchase/details.php";
+                        $view = "views/sales/details.php";
                     }elseif($_REQUEST['ui'] === "reject"){
-                        $view = "views/purchase/reject.main.php";
+                        $view = "views/sales/reject.main.php";
                     }elseif($_REQUEST['ui']==="reject-details"){
                         $_SESSION['invoiceID'] = $_GET['id'];
                         $invoice = sales::get_invoice($conn,$_GET['id']);
@@ -220,9 +221,9 @@ if(!isset($_REQUEST['submit'])){
                         }
                         $update = transaction::UpdateInvoiceSalesRejectTransaction($conn,$_GET['id']);
                         $subTotal = transaction::InvoiceRejectSubTotal($conn,$_GET['id']);
-                        $view = "views/purchase/reject.details.php";
+                        $view = "views/sales/reject.details.php";
                     }elseif($_REQUEST['ui']==="rejectlist"){
-                        $view = "views/purchase/sales.reject.php";
+                        $view = "views/sales/sales.reject.php";
                     }
                 break;
 
@@ -339,6 +340,8 @@ if(!isset($_REQUEST['submit'])){
                         $update = transaction::UpdateInvoiceIssueTransaction($conn,$_GET['type'],$_GET['id']);
                         $subTotal = transaction::InvoiceIssueSubTotal($conn,$_GET['type'],$_GET['id']);
                         $view = "views/transfer/details.php";
+                    }elseif($_REQUEST['ui'] === "listdetails"){
+                        
                     }
                 break;
             }
@@ -733,6 +736,22 @@ if(!isset($_REQUEST['submit'])){
                             "er"=>200
                         );
                     }
+                }elseif($submit[2] === "delete"){
+                    if(false == transaction::DeleteInvoice($conn,$_GET['id'])){
+                        $url = array(
+                            "main"=>"sales",
+                            "ui"=>"list",
+                            "token"=>$_COOKIE['token'],
+                            "er"=>100
+                        );
+                    }else{
+                        $url = array(
+                            "main"=>"sales",
+                            "ui"=>"list",
+                            "token"=>$_COOKIE['token'],
+                            "er"=>200
+                        );
+                    }
                 }
             }elseif($action === "details"){
                 if($submit[2] === "add"){
@@ -895,13 +914,29 @@ if(!isset($_REQUEST['submit'])){
                             "er"=>200
                         );
                     }
+                }elseif($submit[2] === "delete"){
+                    if(false == transaction::DeleteInvoice($conn,$_GET['id'])){
+                        $url = array(
+                            "main"=>"purchase",
+                            "ui"=>"list",
+                            "token"=>$_COOKIE['token'],
+                            "er"=>100
+                        );
+                    }else{
+                        $url = array(
+                            "main"=>"purchase",
+                            "ui"=>"list",
+                            "token"=>$_COOKIE['token'],
+                            "er"=>200
+                        );
+                    }
                 }
             }elseif($action === "details"){
                 if($submit[2] === "add"){
                     $q[] = $_SESSION['invoiceID'];
                     $q[] = $_SESSION['strID'];
                     $q[] = $_SESSION['usrID'];
-                    $q[] = 3;
+                    $q[] = 1;
                     if((!isset($_REQUEST['price']))||($_REQUEST['price'] == 0)){
                         $product = product::view($conn,$_REQUEST['product']);
                         $q[] = $_REQUEST['product'];
@@ -954,7 +989,7 @@ if(!isset($_REQUEST['submit'])){
                 if($submit[2] === "add"){
                     $q[] = $_SESSION['strID'];
                     $q[] = $_SESSION['usrID'];
-                    $q[] = 4;
+                    $q[] = 2;
                     $q[] = date("Y-m-d",strtotime($_REQUEST['date']));
                     $q[] = $_REQUEST['ref'];
                     $q[] = $_REQUEST['details'];
@@ -979,7 +1014,7 @@ if(!isset($_REQUEST['submit'])){
                     $q[] = $_SESSION['invoiceID'];
                     $q[] = $_SESSION['strID'];
                     $q[] = $_SESSION['usrID'];
-                    $q[] = 4;
+                    $q[] = 2;
                     if((!isset($_REQUEST['price']))||($_REQUEST['price'] == 0)){
                         $product = product::view($conn,$_REQUEST['product']);
                         $q[] = $_REQUEST['product'];
