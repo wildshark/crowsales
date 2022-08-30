@@ -21,9 +21,9 @@
                         </div>
                         <form method="post" action="index.php">
                             <div class="form-login">
-                                <label>Email</label>
+                                <label>Username</label>
                                 <div class="form-addons">
-                                    <input type="text" name="usr" placeholder="Enter your email address">
+                                    <input type="text" name="usr" placeholder="Enter your username">
                                     <img src="assets/img/icons/mail.svg" alt="img">
                                 </div>
                             </div>
@@ -37,12 +37,11 @@
                             </div>
                             <div class="form-login">
                                 <div class="alreadyuser">
-                                    <h4><a href="?page=reset" class="hover-a">Forgot Password?</a></h4>
+                                    <h4><a href="#?page=reset" class="hover-a">Forgot Password?</a></h4>
                                 </div>
                             </div>
                             <div class="form-login">
-                                <button type="submit" name="submit" value="user-login" class="btn btn-login"
-                                    href="index.html">Sign In</a>
+                                <button type="submit" name="submit" value="user-login" class="btn btn-login">Sign In</button>
                             </div>
                         </form>
                     </div>
