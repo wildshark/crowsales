@@ -1054,4 +1054,38 @@ function IssueInvoiceDataMain($conn){
     return $output;
 }
 
+function DashboardStoreTransaction($data){
+
+    $output="";
+    if($data == false){
+        $output="";
+    }else{
+        foreach($data as $r){
+            if(!isset($n)){
+                $n = 1;
+            }else{
+                $n = $n + 1;
+            }
+            $store = $r['store_name'];
+            $purchase =number_format($r['purchase'],2);
+            $sales = number_format($r['sales'],2);
+            $reject = number_format($r['reject'],2);
+            $return = number_format($r['sales_return'],2);
+            $issue_in = number_format($r['issue_in'],2);
+            $issue_out = number_format($r['issue_out'],2);
+            $balance = (($r['purchase'] + $r['issue_in'] + $r['sales_return']) - $r['issue_out']);
+            $profit = $balance  - $r['sales'];
+            $output .="
+            <tr>
+                <td>$n</td>
+                <td><a href='javascript:void(0);'>$store</a></td>
+                <td>$balance</td>
+                <td>$sales</td>
+                <td><a href='javascript:void(0);'>b</a></td>
+            </tr>";
+        }
+    }
+    return $output;
+}
+
 ?>

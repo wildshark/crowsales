@@ -14,6 +14,7 @@ include("module/purchase.php");
 include("module/transaction.php");
 include("module/inventory.php");
 include("module/transfer.php");
+include("module/summary.php");
 
 /*
 1 purchase,
@@ -23,6 +24,7 @@ include("module/transfer.php");
 5 transfer-in
 6 transfer-out
 */
+$currency = "GHS";
 
 if(!isset($_REQUEST['submit'])){
     if(!isset($_REQUEST['main'])){
@@ -42,7 +44,13 @@ if(!isset($_REQUEST['submit'])){
             switch($_REQUEST['main']){
 
                 case"dashboard";
-
+                    $getTotalPurchase = summary::TotalPurchase($conn);
+                    $getTotalSales = summary::TotalSales($conn);
+                    $getTotalRejct = summary::TotalReject($conn);
+                    $getTotalSalesReject = summary::TotalSalesReject($conn);
+                    $getStoreTransaction = summary::StoreSummaryTransaction($conn);
+                    $getTotalPurchase = $getTotalPurchase - $getTotalRejct;
+                    $getNetProfit = ($getTotalPurchase + $getTotalSalesReject) - $getTotalSales;
                     $view ="views/dashboard.php";
                 break;
 
@@ -311,7 +319,7 @@ if(!isset($_REQUEST['submit'])){
                             $view = "views/inventory/stock.php";
                         }
                     }elseif($action ==="product"){
-                        $inventory = inventory::stock_product($conn,$id);
+                        
                     }
 
                 break;

@@ -1,4 +1,4 @@
-<li class="nav-item">
+<!--li class="nav-item">
     <div class="top-nav-search">
         <a href="javascript:void(0);" class="responsive-search">
             <i class="fa fa-search"></i>
@@ -13,10 +13,10 @@
             <a class="btn" id="searchdiv"><img src="assets/img/icons/search.svg" alt="img"></a>
         </form>
     </div>
-</li>
+</li-->
 
 
-<li class="nav-item dropdown has-arrow flag-nav">
+<!--li class="nav-item dropdown has-arrow flag-nav">
     <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0);" role="button">
         <img src="assets/img/flags/us1.png" alt="" height="20">
     </a>
@@ -34,11 +34,11 @@
             <img src="assets/img/flags/de.png" alt="" height="16"> German
         </a>
     </div>
-</li>
+</li-->
 
 
 <li class="nav-item dropdown">
-    <a href="javascript:void(0);" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
+    <!--a href="javascript:void(0);" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
         <img src="assets/img/icons/notification-bing.svg" alt="img"> <span class="badge rounded-pill">4</span>
     </a>
     <div class="dropdown-menu notifications">
@@ -134,32 +134,13 @@
         <div class="topnav-dropdown-footer">
             <a href="activities.html">View all Notifications</a>
         </div>
-    </div>
+    </div-->
 </li>
 
 <li class="nav-item dropdown has-arrow main-drop">
-    <a href="javascript:void(0);" class="dropdown-toggle nav-link userset" data-bs-toggle="dropdown">
-        <span class="user-img"><img src="assets/img/profiles/avator1.jpg" alt="">
-            <span class="status online"></span></span>
+    <a class="nav-link userset" href="?user=exit&log=off">
+        <span class="user-img">
+            <img src="assets/img/icons/log-out.svg" class="me-2" alt="img">
+        </span>   
     </a>
-    <div class="dropdown-menu menu-drop-user">
-        <div class="profilename">
-            <div class="profileset">
-                <span class="user-img"><img src="assets/img/profiles/avator1.jpg" alt="">
-                    <span class="status online"></span></span>
-                <div class="profilesets">
-                    <h6>John Doe</h6>
-                    <h5>Admin</h5>
-                </div>
-            </div>
-            <hr class="m-0">
-            <a class="dropdown-item" href="profile.html"> <i class="me-2" data-feather="user"></i> My
-                Profile</a>
-            <a class="dropdown-item" href="generalsettings.html"><i class="me-2"
-                    data-feather="settings"></i>Settings</a>
-            <hr class="m-0">
-            <a class="dropdown-item logout pb-0" href="signin.html"><img src="assets/img/icons/log-out.svg" class="me-2"
-                    alt="img">Logout</a>
-        </div>
-    </div>
 </li>
