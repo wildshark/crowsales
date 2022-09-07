@@ -56,7 +56,10 @@
                 </div>
                 <div class="col-sm-6 order-sm-0"> <strong>Invoiced To:</strong>
                     <address>
-                        <?=$inv['details']?>   
+                        <?=ucwords($client['client'])?><br>
+                        <?=$client['address']?><br>
+                        <?=$client['mobile']?><br>
+                        <?=strtolower($client['email'])?>   
                     </address> 
                 </div>
             </div>

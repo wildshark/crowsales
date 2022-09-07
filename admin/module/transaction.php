@@ -2,6 +2,41 @@
 
 class transaction{
 
+    public static function CountInvoice($conn,$id){
+
+        $sql ="SELECT COUNT(invoice.invoice_id) AS total, invoice.type_id FROM invoice WHERE invoice.type_id =:id GROUP BY invoice.type_id";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute([':id'=>$id]);
+        $count = $stmt->fetch(PDO::FETCH_ASSOC);
+        if($count == false){
+            $output = "0.00";
+        }else{
+            $output = $count['total'];
+        }
+
+        return $output;
+    }
+
+    public static function TotalTransactionPerMonth($conn,$id){
+
+        $sql = "SELECT sum(invoice.amount) AS total FROM invoice WHERE invoice.invo_date BETWEEN :StartDate AND :EndDate AND invoice.type_id =:id";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute([
+            'StartDate'=>date("Y-m-01"),
+            'EndDate'=>date("Y-m-31"),
+            ':id'=>$id
+        ]);
+        $qry = $stmt->fetch(PDO::FETCH_ASSOC);
+        if($qry == false){
+            $output = "0.00";
+        }else{
+            $output = $qry['total'];
+        }
+
+        return $output;
+
+    }
+
     public static function delete($conn,$request){
 
         $sql = "DELETE FROM `transaction` WHERE `tran_id` =:id";

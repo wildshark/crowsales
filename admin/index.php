@@ -45,6 +45,12 @@ if(!isset($_REQUEST['submit'])){
                 switch($_REQUEST['main']){
 
                     case"dashboard";
+                        $total_supply_invoice = transaction::CountInvoice($conn,1);
+                        $total_sales_invoice = transaction::CountInvoice($conn,3);
+
+                        $total_supply_amt = transaction::TotalTransactionPerMonth($conn,1);
+                        $total_sales_amt = transaction::TotalTransactionPerMonth($conn,3);
+
                         $getTotalPurchase = summary::TotalPurchase($conn);
                         $getTotalSales = summary::TotalSales($conn);
                         $getTotalRejct = summary::TotalReject($conn);
@@ -367,6 +373,7 @@ if(!isset($_REQUEST['submit'])){
 
             case"sales-invoice";
                 $inv = sales::get_invoice($conn,$_GET['id']);
+                $client = json_decode($inv['details'],true);
                 $data = sales::list_details_sold($conn,$_GET['id']);
                 $update = transaction::UpdateInvoiceSalesTransaction($conn,$_GET['id']);
                 $subTotal = transaction::InvoiceSalesSubTotal($conn,$_GET['id']);
@@ -741,7 +748,12 @@ if(!isset($_REQUEST['submit'])){
                     $q[] = 3;
                     $q[] = date("Y-m-d",strtotime($_REQUEST['date']));
                     $q[] = $_REQUEST['ref'];
-                    $q[] = $_REQUEST['details'];
+                    $q[] = json_encode([
+                        "client"=>$_REQUEST['name'],
+                        "mobile"=>$_REQUEST['mobile'],
+                        "email"=>$_REQUEST['email'],
+                        "address"=>$_REQUEST['address']
+                    ]);
                     $response = sales::add_main($conn,$q);
                     if($response == false){
                         $url = array(
@@ -919,7 +931,12 @@ if(!isset($_REQUEST['submit'])){
                     $q[] = 1;
                     $q[] = date("Y-m-d",strtotime($_REQUEST['date']));
                     $q[] = $_REQUEST['ref'];
-                    $q[] = $_REQUEST['details'];
+                    $q[] = json_encode([
+                        "client"=>$_REQUEST['name'],
+                        "mobile"=>$_REQUEST['mobile'],
+                        "email"=>$_REQUEST['email'],
+                        "address"=>$_REQUEST['address']
+                    ]);
                     $response = purchase::add_main($conn,$q);
                     if($response == false){
                         $url = array(

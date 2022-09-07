@@ -34,9 +34,33 @@
                                 </div>
                                 <div class="col-lg-12 col-sm-12 col-12">
                                     <div class="form-group">
-                                        <label>Invoice To</label>
+                                        <label>Client/Buiness Name </label>
                                         <div class="input-group">
-                                            <input type="text" name="details" value="">
+                                            <input type="text" name="name" value="">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-sm-12 col-12">
+                                    <div class="form-group">
+                                        <label>Mobile</label>
+                                        <div class="input-group">
+                                            <input type="text" name="mobile" value="">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-sm-12 col-12">
+                                    <div class="form-group">
+                                        <label>Email</label>
+                                        <div class="input-group">
+                                            <input type="text" name="email" value="">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-sm-12 col-12">
+                                    <div class="form-group">
+                                        <label>Address</label>
+                                        <div class="input-group">
+                                            <input type="text" name="address" value="">
                                         </div>
                                     </div>
                                 </div>
