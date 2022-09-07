@@ -27,340 +27,355 @@ include("module/summary.php");
 $currency = "GHS";
 
 if(!isset($_REQUEST['submit'])){
-    if(!isset($_REQUEST['main'])){
+    if(!isset($_REQUEST['print'])){
+        if(!isset($_REQUEST['main'])){
         session_destroy();
         require("frame/login.php");
 
-    }else{
-        if($_GET['token'] !== GenToken($_SESSION['usrID'],$_SESSION['strID'])){
-            header("location: ?token=false");
         }else{
-            $_SESSION['token'] = $_GET['token'];
-            if(!isset($_REQUEST['ui'])){
-                $_SESSION['ui'] ="";
+            if($_GET['token'] !== GenToken($_SESSION['usrID'],$_SESSION['strID'])){
+                header("location: ?token=false");
             }else{
-                $_SESSION['ui'] = $_REQUEST['ui'];
-            }
-            switch($_REQUEST['main']){
+                $_SESSION['token'] = $_GET['token'];
+                if(!isset($_REQUEST['ui'])){
+                    $_SESSION['ui'] ="";
+                }else{
+                    $_SESSION['ui'] = $_REQUEST['ui'];
+                }
+                switch($_REQUEST['main']){
 
-                case"dashboard";
-                    $getTotalPurchase = summary::TotalPurchase($conn);
-                    $getTotalSales = summary::TotalSales($conn);
-                    $getTotalRejct = summary::TotalReject($conn);
-                    $getTotalSalesReject = summary::TotalSalesReject($conn);
-                    $getStoreTransaction = summary::StoreSummaryTransaction($conn);
-                    $getTotalPurchase = $getTotalPurchase - $getTotalRejct;
-                    $getNetProfit = ($getTotalPurchase + $getTotalSalesReject) - $getTotalSales;
-                    $view ="views/dashboard.php";
-                break;
+                    case"dashboard";
+                        $getTotalPurchase = summary::TotalPurchase($conn);
+                        $getTotalSales = summary::TotalSales($conn);
+                        $getTotalRejct = summary::TotalReject($conn);
+                        $getTotalSalesReject = summary::TotalSalesReject($conn);
+                        $getStoreTransaction = summary::StoreSummaryTransaction($conn);
+                        $getTotalPurchase = $getTotalPurchase - $getTotalRejct;
+                        $getNetProfit = ($getTotalPurchase + $getTotalSalesReject) - $getTotalSales;
+                        $view ="views/dashboard.php";
+                    break;
 
-                case"user";
-                    if($_REQUEST['ui'] === "list"){
-                        $data = user::fetch($conn);
-                        $view ="views/user/user.php";     
-                    }elseif($_REQUEST['ui'] === "edit"){
-                        $data = user::view($conn,$_GET['id']);
-                        if($data == false){
-                            $fname = "";
-                            $username = "";
-                            $email = "";
-                            $mobile = "";
-                            $password = "";
-                            $status = "";
-                            $role = "";
-                            $storeID = "";
-                            $store = "";
-                        }else{
-                            $_SESSION['record_id'] = $data['user_id'];
-                            $fname = $data['fname'];
-                            $username = $data['username'];
-                            $email = $data['email'];
-                            $mobile = $data['mobile'];
-                            $password = $data['password'];
-                            $status = $data['status'];
-                            $role = $data['role'];
-                            $store = $data['store_name'];
-                            $storeID = $data['store_id'];
+                    case"user";
+                        if($_REQUEST['ui'] === "list"){
+                            $data = user::fetch($conn);
+                            $view ="views/user/user.php";     
+                        }elseif($_REQUEST['ui'] === "edit"){
+                            $data = user::view($conn,$_GET['id']);
+                            if($data == false){
+                                $fname = "";
+                                $username = "";
+                                $email = "";
+                                $mobile = "";
+                                $password = "";
+                                $status = "";
+                                $role = "";
+                                $storeID = "";
+                                $store = "";
+                            }else{
+                                $_SESSION['record_id'] = $data['user_id'];
+                                $fname = $data['fname'];
+                                $username = $data['username'];
+                                $email = $data['email'];
+                                $mobile = $data['mobile'];
+                                $password = $data['password'];
+                                $status = $data['status'];
+                                $role = $data['role'];
+                                $store = $data['store_name'];
+                                $storeID = $data['store_id'];
+                            }
+                            $view ="views/user/edit.php";
                         }
-                        $view ="views/user/edit.php";
-                    }
-                break;
+                    break;
 
-                case"store";
-                    if($_REQUEST['ui'] === "list"){
-                        $data = store::fetch($conn);
-                        $view ="views/store/store.php";  
-                    }elseif($_REQUEST['ui'] === "edit"){
-                        $_SESSION['record_id'] = $_GET['id'];
-                        $data = store::view($conn,$_GET['id']);
-                        if($data == false){
-                            $name = "";
-                            $address = "";
-                            $mobile = "";
-                            $email = "";
-                            $status = "";
-                        }else{
-                            $name = $data['store_name'];
-                            $address = $data['store_address'];
-                            $mobile = $data['mobile'];
-                            $email = $data['email'];
-                            $status = $data['status'];
-                            $_SESSION['record_id'] = $data['store_id'];
+                    case"store";
+                        if($_REQUEST['ui'] === "list"){
+                            $data = store::fetch($conn);
+                            $view ="views/store/store.php";  
+                        }elseif($_REQUEST['ui'] === "edit"){
+                            $_SESSION['record_id'] = $_GET['id'];
+                            $data = store::view($conn,$_GET['id']);
+                            if($data == false){
+                                $name = "";
+                                $address = "";
+                                $mobile = "";
+                                $email = "";
+                                $status = "";
+                            }else{
+                                $name = $data['store_name'];
+                                $address = $data['store_address'];
+                                $mobile = $data['mobile'];
+                                $email = $data['email'];
+                                $status = $data['status'];
+                                $_SESSION['record_id'] = $data['store_id'];
+                            }
+                            $view ="views/store/edit.php";
                         }
-                        $view ="views/store/edit.php";
-                    }
-                break;
+                    break;
 
-                case"product";
-                    if($_REQUEST['ui'] ==="list"){
-                        $data = product::fetch($conn);
-                        $view ="views/product/product.php";
-                    }elseif($_REQUEST['ui'] ==="edit"){
-                        $data = product::view($conn,$_GET['id']);
-                        if($data == false){
-                            $catagoryID = "";
-                            $brandID = "";
-                            $name = "";
-                            $sku = "";
-                            $details = "";
-                            $discount = "0";
-                            $selling_price = "0.00";
-                            $purchase_price = "0.00";
-                            $status = "";
-                            $brand = "";
-                            $tax = "0";
-                            $catagory = "";
-                        }else{
-                            $_SESSION['record_id'] = $data['product_id'];
-                            $catagoryID = $data['catagory_id'];
-                            $brandID = $data['brand_id'];
-                            $name = $data['product_name'];
-                            $sku = $data['product_sku'];
-                            $details = $data['description'];
-                            $discount = $data['discount'];
-                            $tax = $data['tax'];
-                            $price = $data['price'];
-                            $purchase_price = $data['purchase_price'];
-                            $status = $data['status'];
-                            $brand = $data['brand'];
-                            $catagory = $data['catagory'];
+                    case"product";
+                        if($_REQUEST['ui'] ==="list"){
+                            $data = product::fetch($conn);
+                            $view ="views/product/product.php";
+                        }elseif($_REQUEST['ui'] ==="edit"){
+                            $data = product::view($conn,$_GET['id']);
+                            if($data == false){
+                                $catagoryID = "";
+                                $brandID = "";
+                                $name = "";
+                                $sku = "";
+                                $details = "";
+                                $discount = "0";
+                                $selling_price = "0.00";
+                                $purchase_price = "0.00";
+                                $status = "";
+                                $brand = "";
+                                $tax = "0";
+                                $catagory = "";
+                            }else{
+                                $_SESSION['record_id'] = $data['product_id'];
+                                $catagoryID = $data['catagory_id'];
+                                $brandID = $data['brand_id'];
+                                $name = $data['product_name'];
+                                $sku = $data['product_sku'];
+                                $details = $data['description'];
+                                $discount = $data['discount'];
+                                $tax = $data['tax'];
+                                $price = $data['price'];
+                                $purchase_price = $data['purchase_price'];
+                                $status = $data['status'];
+                                $brand = $data['brand'];
+                                $catagory = $data['catagory'];
+                            }
+                            $view ="views/product/edit.php";
                         }
-                        $view ="views/product/edit.php";
-                    }
-                break;
+                    break;
 
-                case"catagory";
-                    if($_REQUEST['ui']==="list"){
-                        $page['title'] ="Catagory List";
-                        $page['subtitle']= "Manage your Product Catagory";
-                        $page['type'] = "Catagory";
-                        $table_title="<tr>
-                        <th>#</th>
-                        <th>Catagory</th>
-                        <th>Products</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                        </tr>";
-                        $data = catagory::fetch($conn);
-                        $view = "views/catagory/catagory.php";
-                    }elseif($_REQUEST['ui']==="edit"){
-                        $data = catagory::view($conn,$_GET['id']);
-                        if($data == false){
-                            $catagory = "";
-                            $status = "";
-                        }else{
-                            $catagory = $data['catagory'];
-                            $status = $data['status'];
-                            $_SESSION['record_id'] = $data['catagory_id'];
-                        }
-                        $view = "views/catagory/edit.php";
-                    }
-                break;
-
-                case"brand";
-                    if($_REQUEST['ui'] === "list"){
-                        $data = brand::fetch($conn);
-                        $view = "views/brand/brand.php";
-                    }elseif($_REQUEST['ui'] === "edit"){
-                        $data = brand::view($conn,$_GET['id']);
-                        if($data == false){
-                            $brand ="";
-                            $status="";
-                        }else{
-                            $_SESSION['record_id'] = $data['brand_id'];
-                            $brand = $data['brand'];
-                            $status = $data['status'];
-                        }
-                        $view = "views/brand/edit.php";
-                    }
-                break;
-
-                case"sales";
-                    if($_REQUEST['ui'] ==="list"){
-                        $view = "views/sales/main.php";
-                    }elseif($_REQUEST['ui']==="details"){
-                        $_SESSION['invoiceID'] = $_GET['id'];
-                        $invoice = sales::get_invoice($conn,$_GET['id']);
-                        if($invoice == false){
-                            $date = "";
-                            $ref = "";
-                        }else{
-                            $date = $invoice['invo_date'];
-                            $ref = $invoice['ref'];
-                            setcookie("InvoiceDate",$date);
-                        }
-                        $update = transaction::UpdateInvoiceSalesTransaction($conn,$_GET['id']);
-                        $subTotal = transaction::InvoiceSalesSubTotal($conn,$_GET['id']);
-                        $view = "views/sales/invoice.php";
-                    }elseif($_REQUEST['ui'] ==="salesbook"){
-                        $view = "views/sales/details.php";
-                    }elseif($_REQUEST['ui'] === "reject"){
-                        $view = "views/sales/reject.main.php";
-                    }elseif($_REQUEST['ui']==="reject-details"){
-                        $_SESSION['invoiceID'] = $_GET['id'];
-                        $invoice = sales::get_invoice($conn,$_GET['id']);
-                        if($invoice == false){
-                            $date = "";
-                            $ref = "";
-                        }else{
-                            $date = $invoice['invo_date'];
-                            $ref = $invoice['ref'];
-                            setcookie("InvoiceDate",$date);
-                        }
-                        $update = transaction::UpdateInvoiceSalesRejectTransaction($conn,$_GET['id']);
-                        $subTotal = transaction::InvoiceRejectSubTotal($conn,$_GET['id']);
-                        $view = "views/sales/reject.details.php";
-                    }elseif($_REQUEST['ui']==="rejectlist"){
-                        $view = "views/sales/sales.reject.php";
-                    }
-                break;
-
-                case"purchase";
-                    if($_REQUEST['ui'] ==="list"){
-                        $view = "views/purchase/main.php";
-                    }elseif($_REQUEST['ui']==="details"){
-                        $_SESSION['invoiceID'] = $_GET['id'];
-                        $invoice = sales::get_invoice($conn,$_GET['id']);
-                        if($invoice == false){
-                            $date = "";
-                            $ref = "";
-                        }else{
-                            $date = $invoice['invo_date'];
-                            $ref = $invoice['ref'];
-                            setcookie("InvoiceDate",$date);
-                        }
-                        $update = transaction::UpdateInvoicePurchaseTransaction($conn,$_GET['id']);
-                        $subTotal = transaction::InvoicePurchaseSubTotal($conn,$_GET['id']);
-                        $view = "views/purchase/invoice.php";
-                    }elseif($_REQUEST['ui'] ==="purchasebook"){
-                        $view = "views/purchase/details.php";
-                    }elseif($_REQUEST['ui'] === "reject"){
-                        $view = "views/purchase/reject.main.php";
-                    }elseif($_REQUEST['ui']==="reject-details"){
-                        $_SESSION['invoiceID'] = $_GET['id'];
-                        $invoice = sales::get_invoice($conn,$_GET['id']);
-                        if($invoice == false){
-                            $date = "";
-                            $ref = "";
-                        }else{
-                            $date = $invoice['invo_date'];
-                            $ref = $invoice['ref'];
-                            setcookie("InvoiceDate",$date);
-                        }
-                        $update = transaction::UpdateInvoicePurchaseRejectTransaction($conn,$_GET['id']);
-                        $subTotal = transaction::InvoiceRejectSubTotal($conn,$_GET['id']);
-                        $view = "views/purchase/reject.details.php";
-                    }elseif($_REQUEST['ui']==="rejectlist"){
-                        $view = "views/purchase/purchase.reject.php";
-                    }
-                break;
-
-                case"inventory";
-                    if($_REQUEST['frm'] ==="stock"){
-                        $page_title = "Inventory";
-                        $page_sub_title ="All products";
-                        $thead ="<tr>
-                        <th>#</th>
-                        <th>SKU</th>  
-                        <th>Product</th>
-                        <th>Brand</th>
-                        <th>Catagory</th>                   
-                        <th>Bal</th>
-                        </tr>";
-                        $tbody = GenStockInventoryData($conn);
-                        $view = "views/inventory/stock.php";
-                    }elseif($_REQUEST['frm'] === "store"){
-                        if($_REQUEST['ui'] === "store-main"){
-                            $page_title ="Store Inventories";
-                            $page_sub_title ="Inventory summary for all store(s)";
-                            $thead="<tr>
+                    case"catagory";
+                        if($_REQUEST['ui']==="list"){
+                            $page['title'] ="Catagory List";
+                            $page['subtitle']= "Manage your Product Catagory";
+                            $page['type'] = "Catagory";
+                            $table_title="<tr>
                             <th>#</th>
-                            <th>Store Name</th>
-                            <th>Stock</th>
+                            <th>Catagory</th>
+                            <th>Products</th>
+                            <th>Status</th>
                             <th>Action</th>
                             </tr>";
-                            $tbody = StoreInventoryMenu($conn);
-                            $view = "views/inventory/stock.php";
-                        }elseif($_REQUEST['ui'] === "store-details"){
-                            $page_title = "Store :".$_GET['store'];
-                            $page_sub_title = "Store ".$_GET['store']." Total Stock ".$_GET['bal'];
+                            $data = catagory::fetch($conn);
+                            $view = "views/catagory/catagory.php";
+                        }elseif($_REQUEST['ui']==="edit"){
+                            $data = catagory::view($conn,$_GET['id']);
+                            if($data == false){
+                                $catagory = "";
+                                $status = "";
+                            }else{
+                                $catagory = $data['catagory'];
+                                $status = $data['status'];
+                                $_SESSION['record_id'] = $data['catagory_id'];
+                            }
+                            $view = "views/catagory/edit.php";
+                        }
+                    break;
+
+                    case"brand";
+                        if($_REQUEST['ui'] === "list"){
+                            $data = brand::fetch($conn);
+                            $view = "views/brand/brand.php";
+                        }elseif($_REQUEST['ui'] === "edit"){
+                            $data = brand::view($conn,$_GET['id']);
+                            if($data == false){
+                                $brand ="";
+                                $status="";
+                            }else{
+                                $_SESSION['record_id'] = $data['brand_id'];
+                                $brand = $data['brand'];
+                                $status = $data['status'];
+                            }
+                            $view = "views/brand/edit.php";
+                        }
+                    break;
+
+                    case"sales";
+                        if($_REQUEST['ui'] ==="list"){
+                            $view = "views/sales/main.php";
+                        }elseif($_REQUEST['ui']==="details"){
+                            $_SESSION['invoiceID'] = $_GET['id'];
+                            $invoice = sales::get_invoice($conn,$_GET['id']);
+                            if($invoice == false){
+                                $date = "";
+                                $ref = "";
+                            }else{
+                                $date = $invoice['invo_date'];
+                                $ref = $invoice['ref'];
+                                setcookie("InvoiceDate",$date);
+                            }
+                            $update = transaction::UpdateInvoiceSalesTransaction($conn,$_GET['id']);
+                            $subTotal = transaction::InvoiceSalesSubTotal($conn,$_GET['id']);
+                            $view = "views/sales/invoice.php";
+                        }elseif($_REQUEST['ui'] ==="salesbook"){
+                            $view = "views/sales/details.php";
+                        }elseif($_REQUEST['ui'] === "reject"){
+                            $view = "views/sales/reject.main.php";
+                        }elseif($_REQUEST['ui']==="reject-details"){
+                            $_SESSION['invoiceID'] = $_GET['id'];
+                            $invoice = sales::get_invoice($conn,$_GET['id']);
+                            if($invoice == false){
+                                $date = "";
+                                $ref = "";
+                            }else{
+                                $date = $invoice['invo_date'];
+                                $ref = $invoice['ref'];
+                                setcookie("InvoiceDate",$date);
+                            }
+                            $update = transaction::UpdateInvoiceSalesRejectTransaction($conn,$_GET['id']);
+                            $subTotal = transaction::InvoiceRejectSubTotal($conn,$_GET['id']);
+                            $view = "views/sales/reject.details.php";
+                        }elseif($_REQUEST['ui']==="rejectlist"){
+                            $view = "views/sales/sales.reject.php";
+                        }
+                    break;
+
+                    case"purchase";
+                        if($_REQUEST['ui'] ==="list"){
+                            $view = "views/purchase/main.php";
+                        }elseif($_REQUEST['ui']==="details"){
+                            $_SESSION['invoiceID'] = $_GET['id'];
+                            $invoice = sales::get_invoice($conn,$_GET['id']);
+                            if($invoice == false){
+                                $date = "";
+                                $ref = "";
+                            }else{
+                                $date = $invoice['invo_date'];
+                                $ref = $invoice['ref'];
+                                setcookie("InvoiceDate",$date);
+                            }
+                            $update = transaction::UpdateInvoicePurchaseTransaction($conn,$_GET['id']);
+                            $subTotal = transaction::InvoicePurchaseSubTotal($conn,$_GET['id']);
+                            $view = "views/purchase/invoice.php";
+                        }elseif($_REQUEST['ui'] ==="purchasebook"){
+                            $view = "views/purchase/details.php";
+                        }elseif($_REQUEST['ui'] === "reject"){
+                            $view = "views/purchase/reject.main.php";
+                        }elseif($_REQUEST['ui']==="reject-details"){
+                            $_SESSION['invoiceID'] = $_GET['id'];
+                            $invoice = sales::get_invoice($conn,$_GET['id']);
+                            if($invoice == false){
+                                $date = "";
+                                $ref = "";
+                            }else{
+                                $date = $invoice['invo_date'];
+                                $ref = $invoice['ref'];
+                                setcookie("InvoiceDate",$date);
+                            }
+                            $update = transaction::UpdateInvoicePurchaseRejectTransaction($conn,$_GET['id']);
+                            $subTotal = transaction::InvoiceRejectSubTotal($conn,$_GET['id']);
+                            $view = "views/purchase/reject.details.php";
+                        }elseif($_REQUEST['ui']==="rejectlist"){
+                            $view = "views/purchase/purchase.reject.php";
+                        }
+                    break;
+
+                    case"inventory";
+                        if($_REQUEST['frm'] ==="stock"){
+                            $page_title = "Inventory";
+                            $page_sub_title ="All products";
                             $thead ="<tr>
                             <th>#</th>
+                            <th>SKU</th>  
                             <th>Product</th>
-                            <th>Purchase</th>
-                            <th>Purchase reject</th>
-                            <th>Issus In</th>
-                            <th>Issus Out</th>
-                            <th>Sold</th>
-                            <th>Sold Return</th>                            
+                            <th>Brand</th>
+                            <th>Catagory</th>                   
                             <th>Bal</th>
                             </tr>";
-                            $tbody = StoreInventoryData($conn);
+                            $tbody = GenStockInventoryData($conn);
                             $view = "views/inventory/stock.php";
+                        }elseif($_REQUEST['frm'] === "store"){
+                            if($_REQUEST['ui'] === "store-main"){
+                                $page_title ="Store Inventories";
+                                $page_sub_title ="Inventory summary for all store(s)";
+                                $thead="<tr>
+                                <th>#</th>
+                                <th>Store Name</th>
+                                <th>Stock</th>
+                                <th>Action</th>
+                                </tr>";
+                                $tbody = StoreInventoryMenu($conn);
+                                $view = "views/inventory/stock.php";
+                            }elseif($_REQUEST['ui'] === "store-details"){
+                                $page_title = "Store :".$_GET['store'];
+                                $page_sub_title = "Store ".$_GET['store']." Total Stock ".$_GET['bal'];
+                                $thead ="<tr>
+                                <th>#</th>
+                                <th>Product</th>
+                                <th>Purchase</th>
+                                <th>Purchase reject</th>
+                                <th>Issus In</th>
+                                <th>Issus Out</th>
+                                <th>Sold</th>
+                                <th>Sold Return</th>                            
+                                <th>Bal</th>
+                                </tr>";
+                                $tbody = StoreInventoryData($conn);
+                                $view = "views/inventory/stock.php";
+                            }
+                        }elseif($action ==="product"){
+                            
                         }
-                    }elseif($action ==="product"){
-                        
-                    }
 
-                break;
+                    break;
 
-                case"transfer";
-                    if($_REQUEST['ui'] === "list"){
-                        $view = "views/transfer/main.php";
-                    }elseif($_REQUEST['ui'] ==="details"){
-                        $_SESSION['invoiceID'] = $_GET['id'];
-                        $invoice = transfer::get_invoice($conn,$_GET['id']);
-                        if($invoice == false){
-                            $date = "";
-                            $ref = "";
-                        }else{
-                            $date = $invoice['invo_date'];
-                            $ref = $invoice['ref'];
-                            $transfer = transfer::get_transfer($conn,$_GET['id']);
-                            setcookie("InvoiceDate",$date);
-                            setcookie("type_id",$_GET['type']);
+                    case"transfer";
+                        if($_REQUEST['ui'] === "list"){
+                            $view = "views/transfer/main.php";
+                        }elseif($_REQUEST['ui'] ==="details"){
+                            $_SESSION['invoiceID'] = $_GET['id'];
+                            $invoice = transfer::get_invoice($conn,$_GET['id']);
+                            if($invoice == false){
+                                $date = "";
+                                $ref = "";
+                            }else{
+                                $date = $invoice['invo_date'];
+                                $ref = $invoice['ref'];
+                                $transfer = transfer::get_transfer($conn,$_GET['id']);
+                                setcookie("InvoiceDate",$date);
+                                setcookie("type_id",$_GET['type']);
+                            }
+                            if($_GET["type"] == 5){
+                                $_StockDetails = InvoiceIssusInData($conn);
+                            }elseif($_GET["type"] ==6){
+                                $_StockDetails = InvoiceIssusOutData($conn);
+                            }
+                            $update = transaction::UpdateInvoiceIssueTransaction($conn,$_GET['type'],$_GET['id']);
+                            $subTotal = transaction::InvoiceIssueSubTotal($conn,$_GET['type'],$_GET['id']);
+                            $view = "views/transfer/details.php";
+                        }elseif($_REQUEST['ui'] === "listdetails"){
+                            
                         }
-                        if($_GET["type"] == 5){
-                            $_StockDetails = InvoiceIssusInData($conn);
-                        }elseif($_GET["type"] ==6){
-                            $_StockDetails = InvoiceIssusOutData($conn);
-                        }
-                        $update = transaction::UpdateInvoiceIssueTransaction($conn,$_GET['type'],$_GET['id']);
-                        $subTotal = transaction::InvoiceIssueSubTotal($conn,$_GET['type'],$_GET['id']);
-                        $view = "views/transfer/details.php";
-                    }elseif($_REQUEST['ui'] === "listdetails"){
-                        
-                    }
-                break;
-            }
+                    break;
+                }
 
-            if($_REQUEST['main'] ==="dashboard"){
-                require("frame/dashboard.php");
-            }else{
-                require("frame/frame.php");
+                if($_REQUEST['main'] ==="dashboard"){
+                    require("frame/dashboard.php");
+                }else{
+                    require("frame/frame.php");
+                }
             }
         }
+    }else{
+        switch($_REQUEST['print']){
+
+            case"sales-invoice";
+                $inv = sales::get_invoice($conn,$_GET['id']);
+                $data = sales::list_details_sold($conn,$_GET['id']);
+                $update = transaction::UpdateInvoiceSalesTransaction($conn,$_GET['id']);
+                $subTotal = transaction::InvoiceSalesSubTotal($conn,$_GET['id']);
+                require("print/print.invoice.php");
+            break;
+        }
     }
+
+    
 }else{
 //var_dump($_REQUEST);
 //exit;

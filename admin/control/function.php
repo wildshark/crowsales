@@ -474,6 +474,9 @@ function SalesInvoices($conn){
                 <a class='me-3' href='?submit=sales-main-delete&id=$id'>
                     <img src='assets/img/icons/delete.svg' alt='img'>
                 </a>
+                <a class='me-3' href='?print=sales-invoice&id=$id'>
+                    <img src='assets/img/icons/printer.svg' alt='img'>
+                </a>
             </td>
         </tr>";
         }
