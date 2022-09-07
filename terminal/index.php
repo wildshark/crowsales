@@ -6,21 +6,21 @@ include("control/global.php");
 
 include("../module/user.php");
 include("../module/store.php");
-//include("module/product.php");
-//include("module/catagory.php");
-//include("module/brand.php");
-//include("module/sales.php");
-//include("module/purchase.php");
-//include("module/transaction.php");
-//include("module/inventory.php");
-//include("module/transfer.php");
-//include("module/summary.php");
+include("../module/product.php");
+include("../module/catagory.php");
+include("../module/brand.php");
+include("../module/sales.php");
+include("../module/purchase.php");
+include("../module/transaction.php");
+include("../module/inventory.php");
+include("../module/transfer.php");
+include("../module/summary.php");
 
 
 if(!isset($_REQUEST['submit'])){
     if(!isset($_REQUEST['main'])){
         require("frame/login.php");
-        exit(0);
+        exit();
     }else{
         switch($_REQUEST['main']){
 
@@ -37,7 +37,10 @@ if(!isset($_REQUEST['submit'])){
         case"sign-in";
             $q[] = $_REQUEST['username'];
             $q[] = $_REQUEST['password'];
+            var_dump($q);
             $response = user::signin($conn,$q);
+            var_dump($response);
+            exit;
             if($response == false){
                 $url = array(
                     "user"=>false,
