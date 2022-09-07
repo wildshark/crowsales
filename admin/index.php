@@ -4,17 +4,17 @@ include("control/control.php");
 include("control/function.php");
 include("control/global.php");
 
-include("module/user.php");
-include("module/store.php");
-include("module/product.php");
-include("module/catagory.php");
-include("module/brand.php");
-include("module/sales.php");
-include("module/purchase.php");
-include("module/transaction.php");
-include("module/inventory.php");
-include("module/transfer.php");
-include("module/summary.php");
+include("../module/user.php");
+include("../module/store.php");
+include("../module/product.php");
+include("../module/catagory.php");
+include("../module/brand.php");
+include("../module/sales.php");
+include("../module/purchase.php");
+include("../module/transaction.php");
+include("../module/inventory.php");
+include("../module/transfer.php");
+include("../module/summary.php");
 
 /*
 1 purchase,
@@ -381,8 +381,6 @@ if(!isset($_REQUEST['submit'])){
             break;
         }
     }
-
-    
 }else{
 //var_dump($_REQUEST);
 //exit;
@@ -393,8 +391,8 @@ if(!isset($_REQUEST['submit'])){
 
         case"user";
             if($action === "login"){
-                $q[] = $_REQUEST['usr'];
-                $q[] = $_REQUEST['pwd'];
+                $q[] = $_REQUEST['username'];
+                $q[] = $_REQUEST['password'];
                 $response = user::signin($conn,$q);
                 if($response == false){
                     $url = array(

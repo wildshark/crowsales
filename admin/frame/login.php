@@ -23,14 +23,14 @@
                             <div class="form-login">
                                 <label>Username</label>
                                 <div class="form-addons">
-                                    <input type="text" name="usr" placeholder="Enter your username">
+                                    <input type="text" name="username" placeholder="Enter your username">
                                     <img src="assets/img/icons/mail.svg" alt="img">
                                 </div>
                             </div>
                             <div class="form-login">
                                 <label>Password</label>
                                 <div class="pass-group">
-                                    <input type="password" name="pwd" class="pass-input"
+                                    <input type="password" name="password" class="pass-input"
                                         placeholder="Enter your password">
                                     <span class="fas toggle-password fa-eye-slash"></span>
                                 </div>
