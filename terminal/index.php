@@ -27,6 +27,27 @@ if(!isset($_REQUEST['submit'])){
             case"dashboard";
                 $content = "view/dashboard.php";
             break;
+
+            case"invoice";
+                if($_REQUEST['ui'] ==="list"){
+                    $content = "view/invoice/list.php";
+                }elseif($_REQUEST['ui'] ==="main"){
+                    $_SESSION['invoiceID'] = $_GET['id'];
+                    $invoice = sales::get_invoice($conn,$_GET['id']);
+                    if($invoice == false){
+                        $date = "";
+                        $ref = "";
+                    }else{
+                        $date = $invoice['invo_date'];
+                        $ref = $invoice['ref'];
+                        setcookie("InvoiceDate",$date);
+                    }
+                    $update = transaction::UpdateInvoiceSalesTransaction($conn,$_GET['id']);
+                    $subTotal = transaction::InvoiceSalesSubTotal($conn,$_GET['id']);
+                    $content = "view/invoice/invoice.main.php";
+                }
+                
+            break;
         }
         require("frame/frame.php");
     }
@@ -37,10 +58,7 @@ if(!isset($_REQUEST['submit'])){
         case"sign-in";
             $q[] = $_REQUEST['username'];
             $q[] = $_REQUEST['password'];
-            var_dump($q);
             $response = user::signin($conn,$q);
-            var_dump($response);
-            exit;
             if($response == false){
                 $url = array(
                     "user"=>false,
