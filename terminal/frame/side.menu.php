@@ -6,6 +6,18 @@
         </a>
     </li>
     <li class="nav-item">
+        <a class="nav-link" href="?main=product&token=<?=$_GET['token']?>">
+            <i class="ti-settings menu-icon"></i>
+            <span class="menu-title">Product & Price</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="?main=stock&ui=main&token=<?=$_GET['token']?>">
+            <i class="ti-settings menu-icon"></i>
+            <span class="menu-title">Stocks</span>
+        </a>
+    </li>
+    <li class="nav-item">
         <a class="nav-link" href="?main=invoice&ui=list&token=<?=$_GET['token']?>">
             <i class="ti-settings menu-icon"></i>
             <span class="menu-title">Invoice</span>

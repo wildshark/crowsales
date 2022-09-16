@@ -95,51 +95,6 @@ function msgBox($err){
     return $output;
 }
 
-function UserList($data){
-    $output="";
-    if((!isset($data))||($data == false)){
-        $output="";
-    }else{
-        foreach ($data as $r){
-            if(!isset($n)){
-                $n = 1;
-            }else{
-                $n = $n + 1;
-            }
-            $id = $r['user_id'];
-            $name = $r['fname'];
-            $usrn = $r['username'];
-            $email = $r['email'];
-            $mobile = $r['mobile'];
-            $token = $_GET['token'];
-            if($r['status'] == "Enable"){
-                $css ="text-success";
-            }else{
-                $css ="text-danger";
-            }
-            $status = $r['status'];
-
-            $output .="<tr>
-            <td>$n</td>
-            <td>$usrn</td>
-            <td>$name</td>
-            <td>$mobile</td>
-            <td>$email</td>
-            <td class='$css'>$status</td>
-            <td>
-                <a class='me-3' href='?main=user&ui=edit&id=$id&token=$token'>
-                    <img src='assets/img/icons/edit.svg' alt='img'>
-                </a>
-                <a class='me-3' href='?submit=user-delete&id=$id'>
-                    <img src='assets/img/icons/delete.svg' alt='img'>
-                </a>
-            </td>
-        </tr>";
-        }
-    }
-    return $output;
-}
-
 function StoreList($data){
     $output="";
     if((!isset($data))||($data == false)){
@@ -197,7 +152,7 @@ function ProductList($data){
             $id = $r['product_id'];
             $name = $r['product_name'];
             $sku = $r['product_sku'];
-            $price = $r['price'];
+            $price = number_format($r['price'],2);
             $brand = $r['brand'];
             $catagory = $r['catagory'];
             if($r['status'] == "Enable"){
@@ -214,15 +169,6 @@ function ProductList($data){
             <td>$brand</td>
             <td>$catagory</td>
             <td>$price</td>
-            <td class='$css'>$status</td>
-            <td>
-                <a class='me-3' href='?main=product&ui=edit&id=$id&token=$token'>
-                    <img src='assets/img/icons/edit.svg' alt='img'>
-                </a>
-                <a class='me-3' href='?submit=product-delete&id=$id'>
-                    <img src='assets/img/icons/delete.svg' alt='img'>
-                </a>
-            </td>
         </tr>";
         }
     }
@@ -350,88 +296,6 @@ function SalesBook($conn){
     return $output;
 }
 
-function PurchaseBook($conn){
-    $data = purchase::purchase_book($conn);
-    $output="";
-    if((!isset($data))||($data == false)){
-        $output="";
-    }else{
-        foreach ($data as $r){
-            if(!isset($n)){
-                $n = 1;
-            }else{
-                $n = $n + 1;
-            }
-
-            $id = $r['tran_id'];
-            $date = $r['tran_date'];
-            $sku = $r['product_sku'];
-            $name = $r['product_name'];
-            $ref = $r['ref'];
-            $price = $r['price'];
-            $qty = $r['sold'];
-            $store = $r['store_name'];
-            $usrn =  $r['fname'];
-            $amt = number_format($price * $qty,2);
-            
-            $output .="<tr>
-            <td>$n</td>
-            <td>$date</td>
-            <td>$sku</td>
-            <td>$name</td>
-            <td>$ref</td>
-            <td>$price</td>
-            <td>$qty</td> 
-            <td>$amt</td>
-            <td>$store</td>
-            <td>$usrn</td>
-        </tr>";
-        }
-    }
-    return $output;
-}
-
-function PurchaseRejectBook($conn){
-    $data = purchase::reject_book($conn);
-    $output="";
-    if((!isset($data))||($data == false)){
-        $output="";
-    }else{
-        foreach ($data as $r){
-            if(!isset($n)){
-                $n = 1;
-            }else{
-                $n = $n + 1;
-            }
-
-            $id = $r['tran_id'];
-            $date = $r['tran_date'];
-            $sku = $r['product_sku'];
-            $name = $r['product_name'];
-            $ref = $r['ref'];
-            $price = $r['price'];
-            $qty = $r['reject'];
-            $store = $r['store_name'];
-            $usrn =  $r['fname'];
-            $amt = number_format($price * $qty,2);
-            
-            $output .="<tr>
-            <td>$n</td>
-            <td>$date</td>
-            <td>$sku</td>
-            <td>$name</td>
-            <td>$ref</td>
-            <td>$price</td>
-            <td>$qty</td> 
-            <td>$amt</td>
-            <td>$store</td>
-            <td>$usrn</td>
-        </tr>";
-        }
-    }
-    return $output;
-}
-
 function SalesInvoices($conn){
     $data = sales::fetch_inovices($conn);
     $output="";
@@ -474,106 +338,8 @@ function SalesInvoices($conn){
     return $output;
 }
 
-function PurchaseInvoices($conn){
-    $data = purchase::fetch_inovices($conn);
-    $output="";
-    if((!isset($data))||($data == false)){
-        $output="";
-    }else{
-        foreach ($data as $r){
-            if(!isset($n)){
-                $n = 1;
-            }else{
-                $n = $n + 1;
-            }
-
-            $id = $r['invoice_id'];
-            $date = $r['invo_date'];
-            $ref = $r['ref'];
-            $qty = $r['qty'];
-            $subtotal = $r['subtotal'];
-            $discount = $r['discount'];
-            $tax = $r['tax'];
-            $amt = number_format($r['amount'],2);
-            $paid = 0;
-            $store =  $r['store_name'];
-            $usrn =  $r['fname'];
-            $token = $_GET['token'];
-            
-            $output .="<tr>
-            <td>$n</td>
-            <td>$date</td>
-            <td>$ref</td>
-            <td>$qty</td> 
-            <td>$amt</td>
-            <td>$paid</td>
-            <td>$store</td>
-            <td>$usrn</td>
-            <td>
-                <a class='me-3' href='?main=purchase&ui=details&id=$id&token=$token'>
-                    <img src='assets/img/icons/edit.svg' alt='img'>
-                </a>
-                <a class='me-3' href='?submit=purchase-main-delete&id=$id'>
-                    <img src='assets/img/icons/delete.svg' alt='img'>
-                </a>
-            </td>
-        </tr>";
-        }
-    }
-    return $output;
-}
-
 function SalesRejectInvoices($conn){
     $data = sales::fetch_reject_inovices($conn);
-    $output="";
-    if((!isset($data))||($data == false)){
-        $output="";
-    }else{
-        foreach ($data as $r){
-            if(!isset($n)){
-                $n = 1;
-            }else{
-                $n = $n + 1;
-            }
-
-            $id = $r['invoice_id'];
-            $date = $r['invo_date'];
-            $ref = $r['ref'];
-            $qty = $r['qty'];
-            $subtotal = $r['subtotal'];
-            $discount = $r['discount'];
-            $tax = $r['tax'];
-            $amt = number_format($r['amount'],2);
-            $paid = 0;
-            $store =  $r['store_name'];
-            $usrn =  $r['fname'];
-            $token = $_GET['token'];
-            
-            $output .="<tr>
-            <td>$n</td>
-            <td>$date</td>
-            <td>$ref</td>
-            <td>$qty</td> 
-            <td>$amt</td>
-            <td>$paid</td>
-            <td>$store</td>
-            <td>$usrn</td>
-            <td>
-                <a class='me-3' href='?main=sales&ui=reject-details&id=$id&token=$token'>
-                    <img src='assets/img/icons/edit.svg' alt='img'>
-                </a>
-                <a class='me-3' href='?submit=transaction-delete&id=$id'>
-                    <img src='assets/img/icons/delete.svg' alt='img'>
-                </a>
-            </td>
-        </tr>";
-        }
-    }
-    return $output;
-}
-
-function PurchaseRejectInvoices($conn){
-    $data = purchase::fetch_reject_inovices($conn);
     $output="";
     if((!isset($data))||($data == false)){
         $output="";
@@ -661,51 +427,6 @@ function InvoiceSalesData($conn){
     return $output;
 }
 
-function InvoicePurchaseData($conn){ 
-    $data = purchase::list_details_purchase($conn,$_GET['id']);
-    $output="";
-    if((!isset($data))||($data == false)){
-        $output="";
-    }else{
-        foreach ($data as $r){
-            if(!isset($n)){
-                $n = 1;
-            }else{
-                $n = $n + 1;
-            }
-
-            $id = $r['tran_id'];
-            $sku = $r['product_sku'];
-            $product = $r['product_name'];
-            $price = number_format($r['price'],2);
-            $qty = $r['purchase'];
-            $discount = 0;
-            $tax = 0;
-            $amount = number_format($r['amt'],2);
-            
-            
-            $output .="<tr>
-            <td>$n</td>
-            <td class='productimgname'>
-                <a class='product-img'>
-                    <img src='assets/img/product/product8.jpg' alt='product'>
-                </a>
-                <a href='javascript:void(0);'>$sku - $product</a>
-            </td>
-            <td>$qty</td>
-            <td>$price</td>
-            <td>$discount</td>
-            <td>$tax</td>
-            <td>$amount</td>
-            <td>
-                <a href='?submit=purchase-details-delete&id=$id' class='delete-set'><img src='assets/img/icons/delete.svg'alt='svg'></a>
-            </td>
-        </tr>";
-        }
-    }
-    return $output;
-}
-
 function InvoiceSaleRejectData($conn){
     $data = sales::list_details_reject($conn,$_GET['id']);
     $output="";
@@ -751,52 +472,7 @@ function InvoiceSaleRejectData($conn){
     return $output;
 }
 
-function InvoicePurchaseRejectData($conn){ 
-    $data = purchase::list_details_reject($conn,$_GET['id']);
-    $output="";
-    if((!isset($data))||($data == false)){
-        $output="";
-    }else{
-        foreach ($data as $r){
-            if(!isset($n)){
-                $n = 1;
-            }else{
-                $n = $n + 1;
-            }
-
-            $id = $r['tran_id'];
-            $sku = $r['product_sku'];
-            $product = $r['product_name'];
-            $price = number_format($r['price'],2);
-            $qty = $r['return'];
-            $discount = 0;
-            $tax = 0;
-            $amount = number_format($r['amt'],2);
-            
-            
-            $output .="<tr>
-            <td>$n</td>
-            <td class='productimgname'>
-                <a class='product-img'>
-                    <img src='assets/img/product/product8.jpg' alt='product'>
-                </a>
-                <a href='javascript:void(0);'>$sku - $product</a>
-            </td>
-            <td>$qty</td>
-            <td>$price</td>
-            <td>$discount</td>
-            <td>$tax</td>
-            <td>$amount</td>
-            <td>
-                <a href='?submit=sales-reject-delete&id=$id' class='delete-set'><img src='assets/img/icons/delete.svg'alt='svg'></a>
-            </td>
-        </tr>";
-        }
-    }
-    return $output;
-}
-
-function StoreInventoryData($conn){ 
+function InventoryDetails($conn){ 
     $data = inventory::store_stock_details($conn,$_GET['id']);
     $output="";
     if((!isset($data))||($data == false)){
@@ -842,38 +518,6 @@ function StoreInventoryData($conn){
     return $output;
 }
 
-function StoreInventoryMenu($conn){
-    $data = inventory::store_stock_main($conn);
-    $output="";
-    if((!isset($data))||($data == false)){
-        $output="";
-    }else{
-        foreach ($data as $r){
-            if(!isset($n)){
-                $n = 1;
-            }else{
-                $n = $n + 1;
-            }
-            $id = $r['store_id'];
-            $store = $r['store_name'];
-            $bal = $r['bal'];
-            $token = $_GET['token'];
-            
-            $output .="<tr>
-            <td>$n</td>
-            <td>$store</td>
-            <td>$bal</td>
-            <td>
-                <a class='me-3' href='?main=inventory&frm=store&ui=store-details&store=$store&bal=$bal&id=$id&token=$token'>
-                    <img src='assets/img/icons/edit.svg' alt='img'>
-                </a>
-            </td>
-        </tr>";
-        }
-    }
-    return $output;
-}
-
 function GenStockInventoryData($conn){ 
     $data = inventory::general_stock($conn);
     $output="";
@@ -887,16 +531,17 @@ function GenStockInventoryData($conn){
                 $n = $n + 1;
             }
 
+            $id = $r['product_id'];
             $sku = $r['product_sku'];
             $product = $r['product_name'];
             $catagory = $r['catagory'];
             $brand = $r['brand'];
             $bal = $r['bal'];
-            
+            $token = $_GET['token'];
             $output .="<tr>
             <td>$n</td>
             <td>$sku</td>
-            <td>$product</td>
+            <td><a href='?main=stock&ui=details&id=$id&token=$token'>$product</a></td>
             <td>$brand</td>
             <td>$catagory</td>
             <td>$bal</td>

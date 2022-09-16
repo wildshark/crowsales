@@ -28,6 +28,20 @@ if(!isset($_REQUEST['submit'])){
                 $content = "view/dashboard.php";
             break;
 
+            case"product";
+                $data = product::fetch($conn);
+                $content ="view/product/list.php";
+            break;
+
+            case"stock";
+                if($_REQUEST['ui'] === "main"){
+                    $content ="view/stock/main.php";
+                }elseif($_REQUEST['ui'] === "details"){
+                    $content ="view/stock/details.php";
+                }
+
+            break;
+
             case"invoice";
                 if($_REQUEST['ui'] ==="list"){
                     $content = "view/invoice/list.php";
@@ -46,7 +60,6 @@ if(!isset($_REQUEST['submit'])){
                     $subTotal = transaction::InvoiceSalesSubTotal($conn,$_GET['id']);
                     $content = "view/invoice/invoice.main.php";
                 }
-                
             break;
         }
         require("frame/frame.php");
