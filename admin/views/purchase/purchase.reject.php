@@ -4,8 +4,8 @@
         <h6>Manage your purchase reject</h6>
     </div>
     <div class="page-btn">
-        <a href="#" class="btn btn-added"><img src="assets/img/icons/plus.svg" alt="img" class="me-2">Add
-            PurchaseReject </a>
+        <!--a href="#" class="btn btn-added"><img src="assets/img/icons/plus.svg" alt="img" class="me-2">Add
+            PurchaseReject </a-->
     </div>
 </div>
 

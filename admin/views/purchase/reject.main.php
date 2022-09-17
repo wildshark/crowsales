@@ -4,17 +4,17 @@
         <h6>Manage your purchase reject</h6>
     </div>
     <div class="page-btn">
-        <a href="#" data-bs-toggle="modal" data-bs-target="#addForm" class="btn btn-added"><img src="assets/img/icons/plus.svg" alt="img" class="me-2">Add Sales</a>
+        <a href="#" data-bs-toggle="modal" data-bs-target="#addForm" class="btn btn-added"><img src="assets/img/icons/plus.svg" alt="img" class="me-2">Add Reject</a>
         <div class="modal fade" id="addForm" tabindex="-1" aria-labelledby="addbrand" aria-hidden="true">
             <div class="modal-dialog modal-md">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Add Purchase</h5>
+                        <h5 class="modal-title">Add Supply Reject</h5>
                         <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span
                                 aria-hidden="true">×</span></button>
                     </div>
                     <form method="post" action="index.php">
-                        <div class="modal-body">
+                    <div class="modal-body">
                             <div class="row">
                                 <div class="col-lg-6 col-sm-12 col-12">
                                     <div class="form-group">
@@ -34,9 +34,33 @@
                                 </div>
                                 <div class="col-lg-12 col-sm-12 col-12">
                                     <div class="form-group">
-                                        <label>Invoice To</label>
+                                        <label>Client/Buiness Name </label>
                                         <div class="input-group">
-                                            <input type="text" name="details" value="">
+                                            <input type="text" name="name" value="">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-sm-12 col-12">
+                                    <div class="form-group">
+                                        <label>Mobile</label>
+                                        <div class="input-group">
+                                            <input type="text" name="mobile" value="">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-sm-12 col-12">
+                                    <div class="form-group">
+                                        <label>Email</label>
+                                        <div class="input-group">
+                                            <input type="text" name="email" value="">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-sm-12 col-12">
+                                    <div class="form-group">
+                                        <label>Address</label>
+                                        <div class="input-group">
+                                            <input type="text" name="address" value="">
                                         </div>
                                     </div>
                                 </div>

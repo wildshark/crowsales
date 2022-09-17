@@ -4,7 +4,7 @@
         <h6>Manage your purchase</h6>
     </div>
     <div class="page-btn">
-        <a href="#" data-bs-toggle="modal" data-bs-target="#addForm" class="btn btn-added"><img src="assets/img/icons/plus.svg" alt="img" class="me-2">Add Sales</a>
+        <!--a href="#" data-bs-toggle="modal" data-bs-target="#addForm" class="btn btn-added"><img src="assets/img/icons/plus.svg" alt="img" class="me-2">Add </a-->
         <div class="modal fade" id="addForm" tabindex="-1" aria-labelledby="addbrand" aria-hidden="true">
             <div class="modal-dialog modal-md">
                 <div class="modal-content">

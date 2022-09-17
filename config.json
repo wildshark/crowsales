@@ -1,5 +1,5 @@
 {
-    "setup":{
+    "portal":{
         "ower":{
             "business_name":"",
             "address":"",
@@ -8,6 +8,9 @@
         },
         "currency":"GHS",
         "country":""  
+    },
+    "payment":{
+        
     },
     "dbm":{
         "host":"localhost",

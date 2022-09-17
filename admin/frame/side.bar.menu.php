@@ -7,21 +7,21 @@
         <a href="javascript:void(0);"><img src="assets/img/icons/product.svg" alt="img"><span>
                 Product</span> <span class="menu-arrow"></span></a>
         <ul>
-            <li><a href="?main=product&ui=list&token=<?=$_GET['token']?>">Product List</a></li>
-            <li><a href="?main=catagory&ui=list&token=<?=$_GET['token']?>">Category List</a></li>
-            <li><a href="?main=brand&ui=list&token=<?=$_GET['token']?>">Brand List</a></li>
+            <li><a href="?main=catagory&ui=list&token=<?=$_GET['token']?>">Category</a></li>
+            <li><a href="?main=brand&ui=list&token=<?=$_GET['token']?>">Brand</a></li>
+            <li><a href="?main=product&ui=list&token=<?=$_GET['token']?>">Items</a></li>            
             <!--li><a href="importproduct&token=<?=$_GET['token']?>">Import Products</a></li>
             <li><a href="barcode&token=<?=$_GET['token']?>">Print Barcode</a></li-->
         </ul>
     </li>
     <li class="submenu">
         <a href="javascript:void(0);"><img src="assets/img/icons/purchase1.svg" alt="img"><span>
-                Purchase</span> <span class="menu-arrow"></span></a>
+                Supply</span> <span class="menu-arrow"></span></a>
         <ul>
-            <li><a href="?main=purchase&ui=list&token=<?=$_GET['token']?>">Purchase</a></li>
-            <li><a href="?main=purchase&ui=purchasebook&token=<?=$_GET['token']?>">Purchase List</a></li>
-            <li><a href="?main=purchase&ui=reject&token=<?=$_GET['token']?>">Purchase Reject</a></li>
-            <li><a href="?main=purchase&ui=rejectlist&token=<?=$_GET['token']?>">Purchase Return List</a></li>
+            <li><a href="?main=purchase&ui=list&token=<?=$_GET['token']?>">Supply's Invoice</a></li>
+            <li><a href="?main=purchase&ui=purchasebook&token=<?=$_GET['token']?>">Supply List</a></li>
+            <li><a href="?main=purchase&ui=reject&token=<?=$_GET['token']?>">Reject Invoice</a></li>
+            <li><a href="?main=purchase&ui=rejectlist&token=<?=$_GET['token']?>">Reject List</a></li>
         </ul>
     </li>
     <li class="submenu">
@@ -31,7 +31,7 @@
             <li><a href="?main=sales&ui=list&token=<?=$_GET['token']?>">Invoices</a></li>
             <li><a href="?main=sales&ui=salesbook&token=<?=$_GET['token']?>">Sales List</a></li>
             <li><a href="?main=sales&ui=reject&token=<?=$_GET['token']?>">Return Item</a></li>
-            <li><a href="?main=sales&ui=rejectlist&token=<?=$_GET['token']?>">Sales Return List</a></li>
+            <li><a href="?main=sales&ui=rejectlist&token=<?=$_GET['token']?>">Return List</a></li>
             <!--li><a href="?main=pos&token=<?=$_GET['token']?>">POS</a></li-->
             <!--li><a href="?main=pos&token=<?=$_GET['token']?>">New Sales</a></li-->
             <!--li><a href="?main=createsalesreturns&token=<?=$_GET['token']?>">New Sales Return</a></li-->
